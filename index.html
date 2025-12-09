@@ -7,22 +7,118 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Custom Scrollbar for clean look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Chart Container Strict Styling */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.6);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(79, 70, 229, 0.9);
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gradient Animations */
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(79, 70, 229, 0.6); }
+        }
+
+        .animate-slide-up {
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .animate-slide-down {
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* Chart Container */
         .chart-container {
             position: relative;
             width: 100%;
@@ -32,20 +128,244 @@
             margin: 0 auto;
         }
 
-        /* Card Hover Effects */
+        /* Card Styles */
         .interactive-card {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
         }
+
         .interactive-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(79, 70, 229, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(79, 70, 229, 0.5);
         }
-        
+
+        /* Tab Styles */
         .active-tab {
-            border-bottom: 2px solid #0F766E; /* teal-700 */
-            color: #0F766E;
+            border-bottom: 2px solid #4f46e5;
+            color: #4f46e5;
             font-weight: bold;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.1));
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-button {
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .tab-button:hover {
+            color: #fff;
+            background: rgba(79, 70, 229, 0.2);
+        }
+
+        /* Value Cards */
+        .value-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .value-card:hover::before {
+            opacity: 1;
+        }
+
+        .value-card-inner {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 14px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Text Styles */
+        .text-gradient {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-glow {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
+        }
+
+        /* Section Styles */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid Layouts */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(79, 70, 229, 0.3);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-content h3 {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Comparison Table */
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-cell {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-cell:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .comparison-cell-utoppia {
+            border-left: 3px solid #4f46e5;
+        }
+
+        .comparison-cell-decagon {
+            border-left: 3px solid #06b6d4;
+        }
+
+        .comparison-cell-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-cell-value {
+            color: white;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(79, 70, 229, 0.3);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 3rem 1rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .feature-grid {
+                gap: 1rem;
+            }
         }
     </style>
     <!-- Chosen Palette: Professional Teal & Slate. 
@@ -72,358 +392,440 @@
          CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
     -->
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed selection:bg-teal-100">
+<body class="text-white">
 
-    <!-- Header / Nav -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <!-- HEADER / NAV -->
+    <header class="sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="text-2xl">🤖</div>
-                <h1 class="text-xl font-bold tracking-tight text-slate-900">Utoppia <span class="text-slate-400 font-normal">Intelligence Brief</span></h1>
+                <div class="text-3xl animate-float">🚀</div>
+                <h1>Utoppia <span class="text-gradient">Intelligence</span></h1>
             </div>
-            <nav class="hidden md:flex space-x-8">
-                <button onclick="scrollToSection('decagon-profile')" class="text-sm font-medium hover:text-teal-600 transition">Perfil Decagon</button>
-                <button onclick="scrollToSection('comparison-engine')" class="text-sm font-medium hover:text-teal-600 transition">Comparativa</button>
-                <button onclick="scrollToSection('value-prop')" class="text-sm font-medium hover:text-teal-600 transition">Valor Agregado</button>
+            <nav class="hidden md:flex space-x-6">
+                <button onclick="scrollToSection('decagon-profile')" class="tab-button">Análisis</button>
+                <button onclick="scrollToSection('comparison-engine')" class="tab-button">Comparativa</button>
+                <button onclick="scrollToSection('value-prop')" class="tab-button">Ventajas</button>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
 
-        <!-- Intro Section -->
-        <section class="text-center max-w-3xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Arquitectura de Decisión: <br><span class="text-teal-700">Gestión de Resultados</span> vs. <span class="text-indigo-600">Gestión de Tickets</span></h2>
-            <p class="text-lg text-slate-600">
-                Este análisis desglosa la oferta de Decagon frente al ecosistema Utoppia. Mientras Decagon se enfoca en la deflexión de tickets para grandes corporativos, Utoppia se posiciona como un socio de automatización integral enfocado en conversión y ventas.
+        <!-- HERO SECTION -->
+        <section class="text-center animate-slide-up">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight">
+                <span class="text-gradient">Automatización Inteligente</span><br>
+                para el Futuro de los Negocios
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                Mientras Decagon automatiza soporte, Utoppia automatiza ventas. Descubre por qué es la diferencia.
             </p>
+            <button class="btn-primary mx-auto animate-pulse">Explorar Análisis</button>
         </section>
 
-        <!-- SECTION 1: Decagon Deep Dive -->
-        <section id="decagon-profile" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-6 border-b border-slate-100 bg-slate-50">
-                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                    <span class="text-indigo-600">●</span> Perfil de Inteligencia: Decagon.ai
-                </h3>
-                <p class="text-sm text-slate-500 mt-1">Análisis basado en posicionamiento de mercado y estándares Enterprise SaaS.</p>
+        <!-- FEATURE CARDS SECTION -->
+        <section>
+            <div class="section-header">
+                <h2>Por Qué Utoppia es Diferente</h2>
+                <p>Una solución integral diseñada para multiplicar tus ingresos</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-content">
+                        <h3>Mobile First</h3>
+                        <p>Experiencia optimizada para dispositivos móviles desde el primer tap</p>
+                    </div>
+                </div>
                 
-                <!-- Card 1: What they sell -->
-                <div class="p-6 hover:bg-slate-50 transition">
-                    <div class="text-3xl mb-3">📦</div>
-                    <h4 class="font-bold text-lg mb-2">¿Qué Venden?</h4>
-                    <p class="text-sm text-slate-600 mb-4">
-                        Venden <strong>"Agentes de Soporte Enterprise"</strong>. Su producto principal es una capa de IA que se sienta sobre Zendesk, Salesforce o Intercom para cerrar tickets automáticamente.
-                    </p>
-                    <ul class="text-sm space-y-2 text-slate-700">
-                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Enfoque 100% Customer Support (CS).</li>
-                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Automatización de Email y Chat (Voz es secundaria).</li>
-                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Integración profunda con Knowledge Bases.</li>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-content">
+                        <h3>Velocidad Extrema</h3>
+                        <p>Respuestas en milisegundos, sin latencia, sin demoras innecesarias</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-content">
+                        <h3>Seguridad Total</h3>
+                        <p>ISO 27001, encriptación de extremo a extremo, compliance garantizado</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-content">
+                        <h3>ROI Transparente</h3>
+                        <p>Cada centavo invertido genera resultados medibles y verificables</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-content">
+                        <h3>Enfocado en Ventas</h3>
+                        <p>No solo reduce costos, aumenta ingresos de forma exponencial</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-content">
+                        <h3>Soporte Premium</h3>
+                        <p>Team dedicado disponible 24/7 para tu éxito</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DECAGON PROFILE SECTION -->
+        <section id="decagon-profile" class="scroll-mt-24">
+            <div class="section-header">
+                <h2>Análisis: <span class="text-gradient">Decagon.ai</span></h2>
+                <p>Conoce el competidor, entiende la diferencia</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="interactive-card glass rounded-2xl p-6">
+                    <div class="text-5xl mb-4">📦</div>
+                    <h3 class="text-xl font-bold mb-3">¿Qué Venden?</h3>
+                    <p class="text-gray-300 mb-4">Agentes de Soporte Enterprise que cierren tickets automáticamente en Zendesk, Salesforce o Intercom.</p>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex items-start"><span class="mr-2 text-cyan-400">▸</span> <span>100% Customer Support</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-cyan-400">▸</span> <span>Email y Chat (Voz secundaria)</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-cyan-400">▸</span> <span>Knowledge Base Integration</span></li>
                     </ul>
                 </div>
 
-                <!-- Card 2: Pricing Model -->
-                <div class="p-6 hover:bg-slate-50 transition bg-indigo-50/30">
-                    <div class="text-3xl mb-3">💰</div>
-                    <h4 class="font-bold text-lg mb-2">Modelo de Precios</h4>
-                    <p class="text-sm text-slate-600 mb-4">
-                        <strong>Opaco / Enterprise Custom.</strong> No publican precios.
-                    </p>
-                    <div class="bg-white p-3 rounded border border-indigo-100 text-xs text-slate-600">
-                        <strong>Estructura Probable:</strong><br>
-                        1. <u>Platform Fee:</u> Costo anual por acceso ($20k - $50k+ USD/año).<br>
-                        2. <u>Resolution Fee:</u> Costo por ticket cerrado con éxito ($0.50 - $2.00 USD).<br>
-                        <br>
-                        <em>Nota: Este modelo penaliza el volumen. Entre más usas, más pagas, a diferencia del modelo SaaS predecible.</em>
+                <!-- Card 2 -->
+                <div class="interactive-card glass rounded-2xl p-6">
+                    <div class="text-5xl mb-4">💸</div>
+                    <h3 class="text-xl font-bold mb-3">Modelo de Precios</h3>
+                    <p class="text-gray-300 mb-4">Enterprise Custom - Sin transparencia en tarifa.</p>
+                    <div class="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-3 rounded-lg text-xs text-gray-300">
+                        <strong class="block mb-2 text-cyan-300">Estructura Estimada:</strong>
+                        • Platform: $20k-$50k/año<br>
+                        • Per Resolution: $0.50-$2.00
                     </div>
                 </div>
 
-                <!-- Card 3: Target Audience -->
-                <div class="p-6 hover:bg-slate-50 transition">
-                    <div class="text-3xl mb-3">🎯</div>
-                    <h4 class="font-bold text-lg mb-2">Cliente Objetivo</h4>
-                    <p class="text-sm text-slate-600 mb-4">
-                        Grandes empresas B2C con volumen masivo de tickets repetitivos.
-                    </p>
-                    <ul class="text-sm space-y-2 text-slate-700">
-                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Ejemplos: Duolingo, Substack, Eventbrite.</li>
-                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Buyer Persona: VP de Customer Experience (Cost Center).</li>
-                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Necesidad: Reducir headcount en Call Center.</li>
+                <!-- Card 3 -->
+                <div class="interactive-card glass rounded-2xl p-6">
+                    <div class="text-5xl mb-4">🎯</div>
+                    <h3 class="text-xl font-bold mb-3">Cliente Ideal</h3>
+                    <p class="text-gray-300 mb-4">Grandes empresas B2C con volumen masivo de tickets.</p>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex items-start"><span class="mr-2 text-cyan-400">▸</span> <span>Duolingo, Substack, Eventbrite</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-cyan-400">▸</span> <span>VP Customer Experience</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-cyan-400">▸</span> <span>Reducir costos operativos</span></li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: Visualization Hub (Contextual) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <!-- Chart 1: Strategic Focus Radar -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 mb-4">ADN Corporativo: Comparación de Enfoque</h3>
-                <p class="text-sm text-slate-500 mb-6">Mientras Decagon protege el centro de costos (Soporte), Utoppia expande el centro de ingresos (Ventas).</p>
-                <div class="chart-container">
-                    <canvas id="radarChart"></canvas>
-                </div>
+        <!-- CHARTS SECTION -->
+        <section>
+            <div class="section-header">
+                <h2>Visualización del Análisis</h2>
+                <p>Comparación visual de estrategia, ADN y costos</p>
             </div>
 
-            <!-- Chart 2: Cost Structure Simulation -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 mb-4">Estructura de Costos Estimada</h3>
-                <p class="text-sm text-slate-500 mb-6">Comparativa del modelo "All-in" de Utoppia vs. el modelo fragmentado típico de Enterprise AI (Decagon/Retell).</p>
-                
-                <!-- Cost Controls -->
-                <div class="flex gap-2 mb-4 justify-center">
-                    <button onclick="updateCostChart('low')" class="px-3 py-1 text-xs rounded-full bg-slate-100 hover:bg-slate-200 transition focus:ring-2 ring-teal-500">Bajo Volumen</button>
-                    <button onclick="updateCostChart('high')" class="px-3 py-1 text-xs rounded-full bg-slate-100 hover:bg-slate-200 transition focus:ring-2 ring-teal-500">Alto Volumen</button>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Radar Chart -->
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="text-2xl font-bold mb-2">ADN Corporativo</h3>
+                    <p class="text-gray-400 mb-6">Enfoque estratégico de cada empresa</p>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
                 </div>
 
-                <div class="chart-container">
-                    <canvas id="costChart"></canvas>
-                </div>
-                <div class="mt-4 text-xs text-center text-slate-400">
-                    *Estimación basada en análisis de Retell vs Utoppia y modelos Enterprise estándar.
-                </div>
-            </div>
-        </div>
+                <!-- Cost Chart -->
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="text-2xl font-bold mb-2">Estructura de Costos</h3>
+                    <p class="text-gray-400 mb-6">Comparativa de inversión estimada</p>
+                    
+                    <div class="flex gap-2 mb-4 justify-center flex-wrap">
+                        <button onclick="updateCostChart('low')" class="px-4 py-2 rounded-lg bg-purple-600/20 border border-purple-400/30 hover:bg-purple-600/40 transition text-sm">Bajo Volumen</button>
+                        <button onclick="updateCostChart('high')" class="px-4 py-2 rounded-lg bg-purple-600/20 border border-purple-400/30 hover:bg-purple-600/40 transition text-sm">Alto Volumen</button>
+                    </div>
 
-        <!-- SECTION 3: The Comparison Engine -->
-        <section id="comparison-engine" class="bg-white rounded-2xl shadow-sm border border-slate-200">
-            <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div>
-                    <h3 class="text-xl font-bold text-slate-800">Comparativa Directa</h3>
-                    <p class="text-sm text-slate-500">Seleccione una dimensión para analizar diferencias críticas.</p>
-                </div>
-                <!-- Tabs -->
-                <div class="flex space-x-6 text-sm">
-                    <button onclick="switchTab('financial')" id="tab-financial" class="pb-2 text-slate-500 hover:text-slate-800 transition active-tab">Financiera</button>
-                    <button onclick="switchTab('technical')" id="tab-technical" class="pb-2 text-slate-500 hover:text-slate-800 transition">Técnica</button>
-                    <button onclick="switchTab('strategic')" id="tab-strategic" class="pb-2 text-slate-500 hover:text-slate-800 transition">Estratégica</button>
-                </div>
-            </div>
-
-            <div class="p-6 bg-slate-50 min-h-[300px]">
-                <div id="comparison-content" class="grid grid-cols-1 gap-4">
-                    <!-- Dynamic Content Loaded via JS -->
+                    <div class="chart-container">
+                        <canvas id="costChart"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 4: Value Added (Final Verdict) -->
-        <section id="value-prop" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <!-- Utoppia Value -->
-            <div class="bg-teal-50 rounded-2xl p-8 border border-teal-100 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-4 opacity-10 text-teal-900 text-9xl leading-none select-none">U</div>
-                <h3 class="text-2xl font-bold text-teal-900 mb-6">Utoppia (THEgurucompany)</h3>
-                <h4 class="text-sm font-bold uppercase tracking-wider text-teal-600 mb-2">Valor Agregado</h4>
-                
-                <ul class="space-y-4">
-                    <li class="flex gap-3">
-                        <span class="text-teal-600 font-bold">✓</span>
-                        <div>
-                            <strong class="text-teal-900">Solución "Turn-Key" (Llave en mano)</strong>
-                            <p class="text-sm text-teal-800">No solo damos la API. Configuramos, integramos y mantenemos. Incluye ISO 27001 y telefonía local (MX) sin cargos ocultos.</p>
-                        </div>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-teal-600 font-bold">✓</span>
-                        <div>
-                            <strong class="text-teal-900">Enfoque en Ventas (Revenue)</strong>
-                            <p class="text-sm text-teal-800">Nuestros bots (Chato/Recobra) están diseñados para vender, cobrar y agendar. Generamos ROI directo, no solo ahorro.</p>
-                        </div>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-teal-600 font-bold">✓</span>
-                        <div>
-                            <strong class="text-teal-900">Transparencia Financiera</strong>
-                            <p class="text-sm text-teal-800">Modelo "All-in". Sabes exactamente cuánto cuesta el minuto/interacción sin preocuparte por costos de nube, SIP trunking o latencia.</p>
-                        </div>
-                    </li>
-                </ul>
+        <!-- COMPARISON ENGINE -->
+        <section id="comparison-engine" class="scroll-mt-24">
+            <div class="section-header">
+                <h2>Comparativa <span class="text-gradient">Lado a Lado</span></h2>
+                <p>Selecciona una dimensión para el análisis detallado</p>
             </div>
 
-            <!-- Decagon Value -->
-            <div class="bg-white rounded-2xl p-8 border border-slate-200 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-5 text-indigo-900 text-9xl leading-none select-none">D</div>
-                <h3 class="text-2xl font-bold text-indigo-900 mb-6">Decagon</h3>
-                <h4 class="text-sm font-bold uppercase tracking-wider text-indigo-600 mb-2">Valor Agregado</h4>
-                
-                <ul class="space-y-4">
-                    <li class="flex gap-3">
-                        <span class="text-indigo-400 font-bold">✓</span>
-                        <div>
-                            <strong class="text-slate-900">Especialización en Soporte (Deflexión)</strong>
-                            <p class="text-sm text-slate-600">Ideal si el objetivo único es reducir tickets de soporte nivel 1 en Zendesk/Salesforce.</p>
-                        </div>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-indigo-400 font-bold">✓</span>
-                        <div>
-                            <strong class="text-slate-900">Foco Enterprise Global</strong>
-                            <p class="text-sm text-slate-600">Diseñado para empresas Fortune 500 con equipos de ingeniería internos masivos.</p>
-                        </div>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-indigo-400 font-bold">✓</span>
-                        <div>
-                            <strong class="text-slate-900">Integración Profunda de KB</strong>
-                            <p class="text-sm text-slate-600">Potente ingestión de bases de conocimiento para respuestas informativas (no transaccionales).</p>
-                        </div>
-                    </li>
-                </ul>
+            <div class="glass rounded-2xl overflow-hidden">
+                <!-- Tabs -->
+                <div class="flex flex-wrap gap-2 p-6 border-b border-white/10 justify-center sm:justify-start">
+                    <button onclick="switchTab('financial')" id="tab-financial" class="tab-button active-tab">💰 Financiera</button>
+                    <button onclick="switchTab('technical')" id="tab-technical" class="tab-button">🔧 Técnica</button>
+                    <button onclick="switchTab('strategic')" id="tab-strategic" class="tab-button">🎯 Estratégica</button>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6 sm:p-8">
+                    <div id="comparison-content" class="space-y-4">
+                        <!-- Dynamic Content -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VALUE PROPOSITION SECTION -->
+        <section id="value-prop" class="scroll-mt-24">
+            <div class="section-header">
+                <h2>El Veredicto Final</h2>
+                <p>¿Por qué Utoppia es la mejor inversión?</p>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Utoppia Card -->
+                <div class="value-card">
+                    <div class="value-card-inner">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="text-4xl">✨</div>
+                            <h3 class="text-3xl font-bold text-gradient">Utoppia</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-green-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Solución Turn-Key</h4>
+                                    <p class="text-gray-400 text-sm">Nosotros configuramos, integramos y mantenemos. ISO 27001 incluido.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-green-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Enfoque en Ventas</h4>
+                                    <p class="text-gray-400 text-sm">Bots diseñados para vender, cobrar y agendar. ROI directo comprobable.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-green-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Transparencia Financiera</h4>
+                                    <p class="text-gray-400 text-sm">All-in pricing. Sabes exactamente qué pagas sin sorpresas ocultas.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-green-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Soporte Premium 24/7</h4>
+                                    <p class="text-gray-400 text-sm">Team dedicado disponible siempre que necesites. Crecimiento garantizado.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary w-full mt-6">Contactar Ahora</button>
+                    </div>
+                </div>
+
+                <!-- Decagon Card -->
+                <div class="value-card">
+                    <div class="value-card-inner">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="text-4xl">🔷</div>
+                            <h3 class="text-3xl font-bold text-cyan-400">Decagon</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-cyan-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Especialización en Soporte</h4>
+                                    <p class="text-gray-400 text-sm">Ideal si el objetivo único es reducir tickets en Zendesk/Salesforce.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-cyan-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Foco Enterprise Global</h4>
+                                    <p class="text-gray-400 text-sm">Diseñado para Fortune 500 con equipos internos masivos de ingeniería.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-cyan-400 flex-shrink-0">✓</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Integración KB Profunda</h4>
+                                    <p class="text-gray-400 text-sm">Excelente ingestión de bases de conocimiento para respuestas informativas.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <span class="text-2xl text-orange-400 flex-shrink-0">⚠</span>
+                                <div>
+                                    <h4 class="font-bold text-white mb-1">Costos Ocultos</h4>
+                                    <p class="text-gray-400 text-sm">Pricing opaco, costos de ingeniería separados, sorpresas en la factura.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary w-full mt-6 opacity-60">Considerar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="text-center py-12 glass rounded-2xl p-8">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">¿Listo para Transformar tu Negocio?</h2>
+            <p class="text-gray-300 mb-8 max-w-xl mx-auto">
+                Utoppia no es solo una herramienta. Es tu socio en la automatización inteligente que multiplica ingresos.
+            </p>
+            <button class="btn-primary text-lg px-10 py-4">Obtener Demo Gratis</button>
         </section>
 
     </main>
 
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
-        <p>Generado para THEgurucompany. Análisis confidencial basado en datos provistos (Retell/STO) e inteligencia de mercado sobre Decagon.</p>
+    <!-- FOOTER -->
+    <footer>
+        <p class="text-gray-400">
+            © 2025 TheGurúCompany | Utoppia Intelligence. <br>
+            <span class="text-sm">Análisis confidencial de mercado. Datos de Retell & inteligencia competitiva.</span>
+        </p>
     </footer>
 
     <script>
         // --- Data Store ---
         const comparisons = {
             financial: [
-                { feature: "Modelo de Cobro", utoppia: "Transaccional / All-in (Minutos/SMS)", decagon: "Licencia Anual + Costo por Resolución" },
-                { feature: "Transparencia", utoppia: "Total (Tabla de precios definida)", decagon: "Baja (Cotización Enterprise Privada)" },
-                { feature: "Infraestructura", utoppia: "Incluida (Telephony + LLM + Server)", decagon: "Generalmente separada o bundle opaco" },
-                { feature: "Setup", utoppia: "Financiable (70% a 12 meses)", decagon: "High Upfront (Fee de implementación)" }
+                { feature: "Modelo de Cobro", utoppia: "Transaccional / All-in (Minutos/SMS)", decagon: "Licencia Anual + Por Resolución" },
+                { feature: "Transparencia", utoppia: "Total y Clara", decagon: "Baja (Cotización Privada)" },
+                { feature: "Infraestructura", utoppia: "100% Incluida (Telefonía + IA)", decagon: "Separada o Bundle Opaco" },
+                { feature: "Setup Cost", utoppia: "Financiable", decagon: "Implementación Cara" }
             ],
             technical: [
-                { feature: "Especialidad IA", utoppia: "Ventas, Cobranza, Agendamiento (Outbound/Inbound)", decagon: "Soporte al Cliente, FAQ, Tickets (Inbound)" },
-                { feature: "Canales", utoppia: "Voz (Nativa), WhatsApp, SMS", decagon: "Chat/Email (Principal), Voz (Secundario)" },
-                { feature: "Implementación", utoppia: "Servicio Gestionado (Nosotros configuramos)", decagon: "Plataforma Self-Serve / Partner Implementation" }
+                { feature: "Especialidad IA", utoppia: "Ventas, Cobranza, Agendamiento", decagon: "Soporte, FAQ, Tickets" },
+                { feature: "Canales", utoppia: "Voz Nativa, WhatsApp, SMS", decagon: "Chat/Email, Voz Secundario" },
+                { feature: "Implementación", utoppia: "Servicio Gestionado", decagon: "Self-Serve / Partner" }
             ],
             strategic: [
-                { feature: "KPI Principal", utoppia: "Conversión / Recuperación de Cartera", decagon: "Ticket Deflection Rate (CSAT)" },
-                { feature: "Flexibilidad", utoppia: "Alta (Automations custom API)", decagon: "Media (Limitada a integraciones estándar)" },
-                { feature: "Público Ideal", utoppia: "Empresas buscando crecimiento/ventas", decagon: "Empresas buscando reducir costos operativos" }
+                { feature: "KPI Principal", utoppia: "Conversión / Recuperación de Cartera", decagon: "Ticket Deflection (Reducción de Costos)" },
+                { feature: "Flexibilidad", utoppia: "Alta (Automations Custom)", decagon: "Media (Integraciones Estándar)" },
+                { feature: "Público Ideal", utoppia: "Empresas buscando CRECIMIENTO", decagon: "Empresas buscando AHORROS" }
             ]
         };
 
-        // --- Navigation Logic ---
+        // --- Navigation ---
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
 
         // --- Tab Logic ---
         function switchTab(category) {
-            // Update Tab Styles
             document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
                 btn.classList.remove('active-tab');
             });
             document.getElementById(`tab-${category}`).classList.add('active-tab');
 
-            // Render Content
             const container = document.getElementById('comparison-content');
-            container.innerHTML = ''; // Clear current
+            container.innerHTML = '';
             
-            comparisons[category].forEach(item => {
+            comparisons[category].forEach((item, index) => {
                 const row = document.createElement('div');
-                row.className = "bg-white p-4 rounded-lg border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between hover:shadow-md transition gap-4";
+                row.className = "comparison-row";
+                row.style.animationDelay = `${index * 0.1}s`;
                 row.innerHTML = `
-                    <div class="md:w-1/4 font-semibold text-slate-700">${item.feature}</div>
-                    <div class="md:w-1/3 text-teal-700 font-medium bg-teal-50 px-3 py-2 rounded border border-teal-100 w-full">
-                        <span class="text-xs text-teal-400 uppercase font-bold block mb-1">Utoppia</span>
-                        ${item.utoppia}
+                    <div class="comparison-cell font-bold text-lg">${item.feature}</div>
+                    <div class="comparison-cell comparison-cell-utoppia">
+                        <div class="comparison-cell-label">Utoppia</div>
+                        <div class="comparison-cell-value">${item.utoppia}</div>
                     </div>
-                    <div class="hidden md:block text-slate-300">VS</div>
-                    <div class="md:w-1/3 text-indigo-700 font-medium bg-indigo-50 px-3 py-2 rounded border border-indigo-100 w-full">
-                        <span class="text-xs text-indigo-400 uppercase font-bold block mb-1">Decagon</span>
-                        ${item.decagon}
+                    <div class="comparison-cell comparison-cell-decagon">
+                        <div class="comparison-cell-label">Decagon</div>
+                        <div class="comparison-cell-value">${item.decagon}</div>
                     </div>
                 `;
                 container.appendChild(row);
             });
         }
 
-        // --- Chart Logic ---
+        // --- Charts ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Initial Tab Load
             switchTab('financial');
 
-            // 1. Radar Chart (DNA Comparison)
             const ctxRadar = document.getElementById('radarChart').getContext('2d');
             new Chart(ctxRadar, {
                 type: 'radar',
                 data: {
-                    labels: ['Ventas Outbound', 'Soporte Inbound', 'Personalización', 'Facilidad de Uso', 'Costo Predecible', 'Complejidad Técnica'],
+                    labels: ['Ventas', 'Soporte', 'Personalización', 'Facilidad', 'Predictibilidad', 'Complejidad'],
                     datasets: [{
                         label: 'Utoppia',
-                        data: [90, 70, 95, 85, 90, 20], // Low complexity for user (managed)
+                        data: [90, 70, 95, 85, 90, 20],
                         fill: true,
-                        backgroundColor: 'rgba(15, 118, 110, 0.2)',
-                        borderColor: 'rgb(15, 118, 110)',
-                        pointBackgroundColor: 'rgb(15, 118, 110)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(15, 118, 110)'
-                    }, {
-                        label: 'Decagon',
-                        data: [30, 95, 60, 70, 40, 80], // High complexity (engineering required), Low sales focus
-                        fill: true,
-                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        backgroundColor: 'rgba(79, 70, 229, 0.25)',
                         borderColor: 'rgb(79, 70, 229)',
                         pointBackgroundColor: 'rgb(79, 70, 229)',
                         pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(79, 70, 229)'
+                    }, {
+                        label: 'Decagon',
+                        data: [30, 95, 60, 70, 40, 80],
+                        fill: true,
+                        backgroundColor: 'rgba(6, 182, 212, 0.25)',
+                        borderColor: 'rgb(6, 182, 212)',
+                        pointBackgroundColor: 'rgb(6, 182, 212)',
+                        pointBorderColor: '#fff',
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    elements: { line: { borderWidth: 3 } },
+                    elements: { line: { borderWidth: 2 } },
                     scales: {
                         r: {
-                            angleLines: { color: '#e2e8f0' },
-                            grid: { color: '#e2e8f0' },
-                            pointLabels: {
-                                font: { size: 11, family: 'sans-serif' },
-                                color: '#475569'
-                            },
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            pointLabels: { color: 'rgba(255,255,255,0.8)', font: { size: 11 } },
                             suggestedMin: 0,
                             suggestedMax: 100
                         }
                     },
                     plugins: {
-                        legend: { position: 'bottom' }
+                        legend: { labels: { color: 'rgba(255,255,255,0.8)' } }
                     }
                 }
             });
 
-            // 2. Cost Chart (Initial Draw)
             drawCostChart('low');
         });
 
-        // Global variable for cost chart instance
         let costChartInstance = null;
 
         function drawCostChart(scenario) {
             const ctxCost = document.getElementById('costChart').getContext('2d');
-            
-            // Destroy existing if updating
             if(costChartInstance) costChartInstance.destroy();
 
-            // Scenario Logic (Simulated Data)
-            // Utoppia: Stable cost per unit (High Volume gets cheaper per unit in STO quote)
-            // Decagon: Platform fee is high fixed cost, plus variable.
-            
             let utoppiaData, decagonData, labels;
 
             if (scenario === 'low') {
-                // Low Volume: Decagon's platform fee hurts ROI
-                labels = ['Setup/Platform', 'Ingeniería', 'Uso Variable', 'Mantenimiento'];
-                utoppiaData = [5000, 0, 2000, 240]; // Setup + 0 eng + usage + maint
-                decagonData = [20000, 5000, 1000, 0]; // High platform + internal eng time + usage
+                labels = ['Setup', 'Ingeniería', 'Uso', 'Mantenimiento'];
+                utoppiaData = [5000, 0, 2000, 240];
+                decagonData = [20000, 5000, 1000, 0];
             } else {
-                // High Volume: Decagon might stabilize, but Utoppia scales linearly predictable
-                labels = ['Setup/Platform', 'Ingeniería', 'Uso Variable', 'Mantenimiento'];
-                utoppiaData = [5000, 0, 15000, 240]; // Usage grows
-                decagonData = [20000, 5000, 12000, 0]; // Usage grows + internal mgmt costs
+                labels = ['Setup', 'Ingeniería', 'Uso', 'Mantenimiento'];
+                utoppiaData = [5000, 0, 15000, 240];
+                decagonData = [20000, 5000, 12000, 0];
             }
 
             costChartInstance = new Chart(ctxCost, {
@@ -432,22 +834,21 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Utoppia (Costos Claros)',
+                            label: 'Utoppia',
                             data: utoppiaData,
-                            backgroundColor: '#0F766E',
+                            backgroundColor: '#4f46e5',
                             stack: 'Stack 0',
                         },
                         {
-                            label: 'Decagon (Costos Estructura)',
+                            label: 'Decagon',
                             data: decagonData,
-                            backgroundColor: '#4F46E5',
+                            backgroundColor: '#06b6d4',
                             stack: 'Stack 1',
                         },
-                        // Hidden Costs for Competitor (Derived from Retell comparison logic)
                         {
-                            label: 'Costos Ocultos (Tel/Devops)',
+                            label: 'Costos Ocultos',
                             data: scenario === 'low' ? [0, 2000, 500, 0] : [0, 5000, 3000, 0],
-                            backgroundColor: '#ef4444', // Red for danger/hidden
+                            backgroundColor: '#ef4444',
                             stack: 'Stack 1',
                         }
                     ]
@@ -456,19 +857,12 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                        legend: { position: 'bottom' },
-                        title: {
-                            display: true,
-                            text: scenario === 'low' ? 'Escenario: Inicio / Bajo Volumen' : 'Escenario: Escalamiento / Alto Volumen'
-                        }
+                        tooltip: { mode: 'index', intersect: false },
+                        legend: { labels: { color: 'rgba(255,255,255,0.8)' } },
                     },
                     scales: {
-                        x: { stacked: true },
-                        y: { stacked: true, title: { display: true, text: 'Inversión Estimada (USD)' } }
+                        x: { stacked: true, ticks: { color: 'rgba(255,255,255,0.6)' } },
+                        y: { stacked: true, ticks: { color: 'rgba(255,255,255,0.6)' }, title: { display: true, text: 'USD', color: 'white' } }
                     }
                 }
             });
@@ -477,7 +871,6 @@
         function updateCostChart(scenario) {
             drawCostChart(scenario);
         }
-
     </script>
 </body>
 </html>
