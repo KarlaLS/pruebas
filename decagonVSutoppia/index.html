@@ -1,420 +1,482 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Competitive Intelligence: Decagon vs. Utoppia</title>
+    <title>Análisis Competitivo: Utoppia vs. Decagon</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; max-height: 400px; }
-        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transition: transform 0.2s; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .btn-primary { background-color: #3b82f6; color: white; padding: 0.5rem 1.5rem; border-radius: 9999px; transition: background-color 0.2s; }
-        .btn-primary:hover { background-color: #2563eb; }
-        .btn-secondary { background-color: #e2e8f0; color: #475569; padding: 0.5rem 1.5rem; border-radius: 9999px; transition: background-color 0.2s; }
-        .btn-secondary:hover { background-color: #cbd5e1; }
-        .active-tab { border-bottom: 2px solid #3b82f6; color: #3b82f6; font-weight: 600; }
-        .metric-value { font-size: 1.875rem; font-weight: 700; color: #1e293b; }
-        .metric-label { font-size: 0.875rem; color: #64748b; }
+        /* Custom Scrollbar for clean look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Chart Container Strict Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            max-height: 400px;
+            margin: 0 auto;
+        }
+
+        /* Card Hover Effects */
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
         
-        /* Custom Scrollbar for internal tables */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .active-tab {
+            border-bottom: 2px solid #0F766E; /* teal-700 */
+            color: #0F766E;
+            font-weight: bold;
+        }
     </style>
-    <!-- Chosen Palette: Slate & Blue (Enterprise Trust & Technology) -->
-    <!-- Application Structure Plan:
-        1. Hero Section: High-level positioning statement comparison.
-        2. Performance Dashboard: Interactive Radar & Bar charts comparing core metrics (Resolution, Setup, Customization).
-        3. Feature Matrix: Filterable list of features (Integrations, Security, AI capabilities) with 'Winner' highlights.
-        4. ROI Calculator: Interactive slider to demonstrate cost savings comparison based on ticket volume.
-        5. Deep Dive Analysis: Textual breakdown of the "Philosophy" (Fine-tuning vs. Autonomy).
-        Rationale: This structure moves from "Big Picture" (Hero) to "Hard Data" (Dashboard) to "Specifics" (Matrix) to "Value" (ROI), mirroring a decision-maker's evaluation process.
+    <!-- Chosen Palette: Professional Teal & Slate. 
+         Background: Slate-50 (Warm Neutral). 
+         Utoppia Brand: Teal-700 (Reliability/Growth). 
+         Decagon Brand: Indigo-600 (Tech/SaaS). 
+         Text: Slate-800. -->
+    
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the stage (Service vs. Product).
+         2. Decagon Intel: Deep dive into the competitor (Pricing, Target, Product) using cards.
+         3. The Comparison Engine: A tabbed interface allowing comparison across Financial, Technical, and Strategic dimensions.
+         4. Visualization Hub: A Radar chart comparing the "DNA" of both companies (Support vs Sales, etc.).
+         5. The Value Verdict: Final summary of added value using a split-screen layout.
+         
+         Why this structure? It moves from "Who are they?" to "How do we differ?" to "Why us?", mirroring a sales conversation.
     -->
+
     <!-- Visualization & Content Choices:
-        1. Radar Chart: Visualizing the "Shape" of the products across 5 dimensions (Enterprise, Agility, etc.). Goal: Compare.
-        2. Stacked Bar Chart: Comparing 'Ticket Resolution Composition' (AI vs Human). Goal: Inform.
-        3. Feature List: Interactive HTML list. Goal: Organize.
-        4. ROI Calculator: Simple JS math. Goal: Engage.
-        Confirming NO SVG, NO Mermaid. Using Chart.js for all visuals.
+         1. Radar Chart: Goal -> Compare qualitative focus areas (Sales vs Support). Interaction -> None (Static snapshot). Justification -> Best way to show multi-dimensional divergence.
+         2. Bar Chart: Goal -> Illustrate Pricing Architecture. Interaction -> Toggle between models. Justification -> Shows structure differences (Fixed vs Variable) visually.
+         3. Tabbed Tables: Goal -> Organize text-heavy comparison data. Interaction -> Click to filter. Justification -> Prevents information overload.
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
     -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-<body class="antialiased">
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed selection:bg-teal-100">
 
-    <!-- Navigation / Header -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center gap-3">
-                        <span class="text-2xl font-bold text-slate-800 tracking-tight">CI<span class="text-blue-600">.Dash</span></span>
-                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full uppercase tracking-wide font-semibold">Decagon vs Utoppia</span>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button onclick="scrollToSection('dashboard')" class="text-slate-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Performance</button>
-                    <button onclick="scrollToSection('features')" class="text-slate-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Feature Matrix</button>
-                    <button onclick="scrollToSection('roi')" class="text-slate-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">ROI Calculator</button>
-                </div>
+    <!-- Header / Nav -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="text-2xl">🤖</div>
+                <h1 class="text-xl font-bold tracking-tight text-slate-900">Utoppia <span class="text-slate-400 font-normal">Intelligence Brief</span></h1>
             </div>
+            <nav class="hidden md:flex space-x-8">
+                <button onclick="scrollToSection('decagon-profile')" class="text-sm font-medium hover:text-teal-600 transition">Perfil Decagon</button>
+                <button onclick="scrollToSection('comparison-engine')" class="text-sm font-medium hover:text-teal-600 transition">Comparativa</button>
+                <button onclick="scrollToSection('value-prop')" class="text-sm font-medium hover:text-teal-600 transition">Valor Agregado</button>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
 
-        <!-- Executive Summary Hero -->
-        <div class="bg-white rounded-2xl p-8 shadow-sm mb-10 border border-slate-100">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-900 mb-2">Market Position Analysis</h1>
-                    <p class="text-slate-500 max-w-2xl">
-                        A head-to-head technical and operational comparison between <span class="font-bold text-slate-900">Decagon's</span> enterprise-focused custom models and <span class="font-bold text-blue-600">Utoppia's</span> agile autonomous agents.
-                    </p>
-                </div>
-                <div class="mt-4 md:mt-0 flex gap-2">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        Live Data Simulation
-                    </span>
-                </div>
+        <!-- Intro Section -->
+        <section class="text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Arquitectura de Decisión: <br><span class="text-teal-700">Gestión de Resultados</span> vs. <span class="text-indigo-600">Gestión de Tickets</span></h2>
+            <p class="text-lg text-slate-600">
+                Este análisis desglosa la oferta de Decagon frente al ecosistema Utoppia. Mientras Decagon se enfoca en la deflexión de tickets para grandes corporativos, Utoppia se posiciona como un socio de automatización integral enfocado en conversión y ventas.
+            </p>
+        </section>
+
+        <!-- SECTION 1: Decagon Deep Dive -->
+        <section id="decagon-profile" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="text-indigo-600">●</span> Perfil de Inteligencia: Decagon.ai
+                </h3>
+                <p class="text-sm text-slate-500 mt-1">Análisis basado en posicionamiento de mercado y estándares Enterprise SaaS.</p>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Decagon Summary -->
-                <div class="p-6 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-slate-800">Decagon</h2>
-                        <span class="text-xs font-bold bg-slate-200 text-slate-600 px-2 py-1 rounded">The Incumbent</span>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-slate-400 mr-2">➜</span>
-                            <span class="text-sm text-slate-700"><strong>Core Philosophy:</strong> Mirrors top human agents using fine-tuned enterprise models.</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-slate-400 mr-2">➜</span>
-                            <span class="text-sm text-slate-700"><strong>Key Strength:</strong> Deep enterprise integrations & "Human-like" tone consistency.</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-slate-400 mr-2">➜</span>
-                            <span class="text-sm text-slate-700"><strong>Best For:</strong> Large enterprises with complex, legacy workflows requiring rigid compliance.</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Utoppia Summary -->
-                <div class="p-6 bg-blue-50 rounded-xl border border-blue-100 ring-1 ring-blue-200">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-blue-700">Utoppia</h2>
-                        <span class="text-xs font-bold bg-blue-200 text-blue-800 px-2 py-1 rounded">The Challenger</span>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-blue-400 mr-2">➜</span>
-                            <span class="text-sm text-slate-700"><strong>Core Philosophy:</strong> End-to-end autonomous resolution with rapid deployment capability.</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-blue-400 mr-2">➜</span>
-                            <span class="text-sm text-slate-700"><strong>Key Strength:</strong> Speed to value, adaptive learning, and seamless global scalability.</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-blue-400 mr-2">➜</span>
-                            <span class="text-sm text-slate-700"><strong>Best For:</strong> High-growth companies needing agile, self-correcting support automation.</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dashboard Section -->
-        <div id="dashboard" class="mb-12">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-slate-900">Performance Benchmarks</h2>
-                <p class="text-sm text-slate-500">Comparative analysis of capabilities across key operational dimensions.</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Radar Chart Card -->
-                <div class="card p-6">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-4 text-center">Capability Dimensions</h3>
-                    <div class="chart-container">
-                        <canvas id="radarChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <p class="text-xs text-slate-500">
-                            <span class="inline-block w-3 h-3 rounded-full bg-slate-400 mr-1"></span> Decagon
-                            <span class="inline-block w-3 h-3 rounded-full bg-blue-500 ml-4 mr-1"></span> Utoppia
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Resolution Comparison Card -->
-                <div class="card p-6">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-4 text-center">Ticket Resolution Composition</h3>
-                    <div class="chart-container">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                    <div class="mt-6 p-4 bg-slate-50 rounded-lg text-sm text-slate-600">
-                        <p><strong>Insight:</strong> While Decagon excels at "Human Assist" (drafting for agents), Utoppia demonstrates a higher "Fully Autonomous" rate due to its agentic workflow architecture.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature Matrix Section -->
-        <div id="features" class="mb-12">
-            <div class="flex flex-col sm:flex-row justify-between items-end mb-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900">Feature Battleground</h2>
-                    <p class="text-sm text-slate-500">Direct comparison of specific functionalities and integrations.</p>
-                </div>
-                <div class="flex gap-2 mt-4 sm:mt-0">
-                    <button id="btn-all" class="px-4 py-2 text-sm font-medium rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition" onclick="filterFeatures('all')">All</button>
-                    <button id="btn-ai" class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition" onclick="filterFeatures('ai')">AI Core</button>
-                    <button id="btn-ops" class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition" onclick="filterFeatures('ops')">Ops & Security</button>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow overflow-hidden border border-slate-200">
-                <table class="min-w-full divide-y divide-slate-200">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Feature</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
-                            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-slate-800 uppercase tracking-wider bg-slate-100">Decagon</th>
-                            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-blue-700 uppercase tracking-wider bg-blue-50">Utoppia</th>
-                        </tr>
-                    </thead>
-                    <tbody id="featureTableBody" class="bg-white divide-y divide-slate-200 text-sm">
-                        <!-- JS will populate this -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Interactive ROI Calculator -->
-        <div id="roi" class="mb-12">
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl shadow-lg p-8 text-white relative overflow-hidden">
-                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                 
-                <h2 class="text-2xl font-bold mb-2 relative z-10">Impact Calculator</h2>
-                <p class="text-slate-300 mb-8 max-w-xl relative z-10">Estimate the potential monthly savings by switching to Utoppia's autonomous architecture based on your current volume.</p>
+                <!-- Card 1: What they sell -->
+                <div class="p-6 hover:bg-slate-50 transition">
+                    <div class="text-3xl mb-3">📦</div>
+                    <h4 class="font-bold text-lg mb-2">¿Qué Venden?</h4>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Venden <strong>"Agentes de Soporte Enterprise"</strong>. Su producto principal es una capa de IA que se sienta sobre Zendesk, Salesforce o Intercom para cerrar tickets automáticamente.
+                    </p>
+                    <ul class="text-sm space-y-2 text-slate-700">
+                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Enfoque 100% Customer Support (CS).</li>
+                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Automatización de Email y Chat (Voz es secundaria).</li>
+                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Integración profunda con Knowledge Bases.</li>
+                    </ul>
+                </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
-                    <div class="lg:col-span-1 space-y-6">
-                        <div>
-                            <label for="ticketVolume" class="block text-sm font-medium text-slate-300 mb-2">Monthly Tickets</label>
-                            <input type="range" id="ticketVolume" min="1000" max="50000" step="1000" value="10000" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500">
-                            <div class="text-2xl font-bold mt-2 text-white" id="ticketDisplay">10,000</div>
-                        </div>
-                        <div>
-                            <label for="ticketCost" class="block text-sm font-medium text-slate-300 mb-2">Cost Per Ticket ($)</label>
-                            <input type="range" id="ticketCost" min="2" max="20" step="0.5" value="8" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500">
-                            <div class="text-2xl font-bold mt-2 text-white" id="costDisplay">$8.00</div>
-                        </div>
+                <!-- Card 2: Pricing Model -->
+                <div class="p-6 hover:bg-slate-50 transition bg-indigo-50/30">
+                    <div class="text-3xl mb-3">💰</div>
+                    <h4 class="font-bold text-lg mb-2">Modelo de Precios</h4>
+                    <p class="text-sm text-slate-600 mb-4">
+                        <strong>Opaco / Enterprise Custom.</strong> No publican precios.
+                    </p>
+                    <div class="bg-white p-3 rounded border border-indigo-100 text-xs text-slate-600">
+                        <strong>Estructura Probable:</strong><br>
+                        1. <u>Platform Fee:</u> Costo anual por acceso ($20k - $50k+ USD/año).<br>
+                        2. <u>Resolution Fee:</u> Costo por ticket cerrado con éxito ($0.50 - $2.00 USD).<br>
+                        <br>
+                        <em>Nota: Este modelo penaliza el volumen. Entre más usas, más pagas, a diferencia del modelo SaaS predecible.</em>
                     </div>
+                </div>
 
-                    <div class="lg:col-span-2 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 flex flex-col justify-center">
-                        <div class="grid grid-cols-2 gap-8 text-center">
-                            <div>
-                                <p class="text-sm text-slate-300 mb-1">Decagon Est. Cost</p>
-                                <p class="text-xs text-slate-400 mb-2">(High Automation)</p>
-                                <div id="decagonCost" class="text-3xl font-bold text-slate-200">$0</div>
-                            </div>
-                            <div>
-                                <p class="text-sm text-blue-200 mb-1">Utoppia Est. Cost</p>
-                                <p class="text-xs text-blue-300 mb-2">(Max Autonomy)</p>
-                                <div id="utoppiaCost" class="text-4xl font-bold text-blue-400">$0</div>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-6 border-t border-white/10 text-center">
-                            <p class="text-lg text-slate-300">Potential Monthly Savings</p>
-                            <p id="savingsDisplay" class="text-4xl font-extrabold text-green-400 mt-2">$0</p>
-                        </div>
-                    </div>
+                <!-- Card 3: Target Audience -->
+                <div class="p-6 hover:bg-slate-50 transition">
+                    <div class="text-3xl mb-3">🎯</div>
+                    <h4 class="font-bold text-lg mb-2">Cliente Objetivo</h4>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Grandes empresas B2C con volumen masivo de tickets repetitivos.
+                    </p>
+                    <ul class="text-sm space-y-2 text-slate-700">
+                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Ejemplos: Duolingo, Substack, Eventbrite.</li>
+                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Buyer Persona: VP de Customer Experience (Cost Center).</li>
+                        <li class="flex items-start"><span class="mr-2 text-indigo-500">▸</span> Necesidad: Reducir headcount en Call Center.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Visualization Hub (Contextual) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Chart 1: Strategic Focus Radar -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">ADN Corporativo: Comparación de Enfoque</h3>
+                <p class="text-sm text-slate-500 mb-6">Mientras Decagon protege el centro de costos (Soporte), Utoppia expande el centro de ingresos (Ventas).</p>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Cost Structure Simulation -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">Estructura de Costos Estimada</h3>
+                <p class="text-sm text-slate-500 mb-6">Comparativa del modelo "All-in" de Utoppia vs. el modelo fragmentado típico de Enterprise AI (Decagon/Retell).</p>
+                
+                <!-- Cost Controls -->
+                <div class="flex gap-2 mb-4 justify-center">
+                    <button onclick="updateCostChart('low')" class="px-3 py-1 text-xs rounded-full bg-slate-100 hover:bg-slate-200 transition focus:ring-2 ring-teal-500">Bajo Volumen</button>
+                    <button onclick="updateCostChart('high')" class="px-3 py-1 text-xs rounded-full bg-slate-100 hover:bg-slate-200 transition focus:ring-2 ring-teal-500">Alto Volumen</button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+                <div class="mt-4 text-xs text-center text-slate-400">
+                    *Estimación basada en análisis de Retell vs Utoppia y modelos Enterprise estándar.
                 </div>
             </div>
         </div>
-        
+
+        <!-- SECTION 3: The Comparison Engine -->
+        <section id="comparison-engine" class="bg-white rounded-2xl shadow-sm border border-slate-200">
+            <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">Comparativa Directa</h3>
+                    <p class="text-sm text-slate-500">Seleccione una dimensión para analizar diferencias críticas.</p>
+                </div>
+                <!-- Tabs -->
+                <div class="flex space-x-6 text-sm">
+                    <button onclick="switchTab('financial')" id="tab-financial" class="pb-2 text-slate-500 hover:text-slate-800 transition active-tab">Financiera</button>
+                    <button onclick="switchTab('technical')" id="tab-technical" class="pb-2 text-slate-500 hover:text-slate-800 transition">Técnica</button>
+                    <button onclick="switchTab('strategic')" id="tab-strategic" class="pb-2 text-slate-500 hover:text-slate-800 transition">Estratégica</button>
+                </div>
+            </div>
+
+            <div class="p-6 bg-slate-50 min-h-[300px]">
+                <div id="comparison-content" class="grid grid-cols-1 gap-4">
+                    <!-- Dynamic Content Loaded via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Value Added (Final Verdict) -->
+        <section id="value-prop" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Utoppia Value -->
+            <div class="bg-teal-50 rounded-2xl p-8 border border-teal-100 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-teal-900 text-9xl leading-none select-none">U</div>
+                <h3 class="text-2xl font-bold text-teal-900 mb-6">Utoppia (THEgurucompany)</h3>
+                <h4 class="text-sm font-bold uppercase tracking-wider text-teal-600 mb-2">Valor Agregado</h4>
+                
+                <ul class="space-y-4">
+                    <li class="flex gap-3">
+                        <span class="text-teal-600 font-bold">✓</span>
+                        <div>
+                            <strong class="text-teal-900">Solución "Turn-Key" (Llave en mano)</strong>
+                            <p class="text-sm text-teal-800">No solo damos la API. Configuramos, integramos y mantenemos. Incluye ISO 27001 y telefonía local (MX) sin cargos ocultos.</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-teal-600 font-bold">✓</span>
+                        <div>
+                            <strong class="text-teal-900">Enfoque en Ventas (Revenue)</strong>
+                            <p class="text-sm text-teal-800">Nuestros bots (Chato/Recobra) están diseñados para vender, cobrar y agendar. Generamos ROI directo, no solo ahorro.</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-teal-600 font-bold">✓</span>
+                        <div>
+                            <strong class="text-teal-900">Transparencia Financiera</strong>
+                            <p class="text-sm text-teal-800">Modelo "All-in". Sabes exactamente cuánto cuesta el minuto/interacción sin preocuparte por costos de nube, SIP trunking o latencia.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Decagon Value -->
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-5 text-indigo-900 text-9xl leading-none select-none">D</div>
+                <h3 class="text-2xl font-bold text-indigo-900 mb-6">Decagon</h3>
+                <h4 class="text-sm font-bold uppercase tracking-wider text-indigo-600 mb-2">Valor Agregado</h4>
+                
+                <ul class="space-y-4">
+                    <li class="flex gap-3">
+                        <span class="text-indigo-400 font-bold">✓</span>
+                        <div>
+                            <strong class="text-slate-900">Especialización en Soporte (Deflexión)</strong>
+                            <p class="text-sm text-slate-600">Ideal si el objetivo único es reducir tickets de soporte nivel 1 en Zendesk/Salesforce.</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-indigo-400 font-bold">✓</span>
+                        <div>
+                            <strong class="text-slate-900">Foco Enterprise Global</strong>
+                            <p class="text-sm text-slate-600">Diseñado para empresas Fortune 500 con equipos de ingeniería internos masivos.</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-indigo-400 font-bold">✓</span>
+                        <div>
+                            <strong class="text-slate-900">Integración Profunda de KB</strong>
+                            <p class="text-sm text-slate-600">Potente ingestión de bases de conocimiento para respuestas informativas (no transaccionales).</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-sm">&copy; 2023 Competitive Intelligence Dashboard. Generated for Comparison Analysis.</p>
-        </div>
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>Generado para THEgurucompany. Análisis confidencial basado en datos provistos (Retell/STO) e inteligencia de mercado sobre Decagon.</p>
     </footer>
 
     <script>
-        // --- DATA & STATE MANAGEMENT ---
-        
-        // Feature Data
-        const features = [
-            { name: "Fine-Tuned LLMs", category: "ai", decagon: "Proprietary / Enterprise", utoppia: "Adaptive / Agile", winner: "Decagon" },
-            { name: "Setup Time", category: "ops", decagon: "4-8 Weeks", utoppia: "< 1 Week", winner: "Utoppia" },
-            { name: "Autonomous Resolution", category: "ai", decagon: "Conservative", utoppia: "Aggressive", winner: "Utoppia" },
-            { name: "Data Security", category: "ops", decagon: "SOC2 Type II / HIPAA", utoppia: "SOC2 Type II", winner: "Draw" },
-            { name: "Voice Support", category: "ai", decagon: "Native", utoppia: "Partner Integration", winner: "Decagon" },
-            { name: "Integration Depth", category: "ops", decagon: "Deep Legacy (Custom)", utoppia: "Modern API First", winner: "Draw" },
-            { name: "Pricing Model", category: "ops", decagon: "Contract / Enterprise", utoppia: "Usage / Flexible", winner: "Utoppia" },
-            { name: "Hallucination Control", category: "ai", decagon: "Strict Constraints", utoppia: "Self-Correction", winner: "Draw" }
-        ];
+        // --- Data Store ---
+        const comparisons = {
+            financial: [
+                { feature: "Modelo de Cobro", utoppia: "Transaccional / All-in (Minutos/SMS)", decagon: "Licencia Anual + Costo por Resolución" },
+                { feature: "Transparencia", utoppia: "Total (Tabla de precios definida)", decagon: "Baja (Cotización Enterprise Privada)" },
+                { feature: "Infraestructura", utoppia: "Incluida (Telephony + LLM + Server)", decagon: "Generalmente separada o bundle opaco" },
+                { feature: "Setup", utoppia: "Financiable (70% a 12 meses)", decagon: "High Upfront (Fee de implementación)" }
+            ],
+            technical: [
+                { feature: "Especialidad IA", utoppia: "Ventas, Cobranza, Agendamiento (Outbound/Inbound)", decagon: "Soporte al Cliente, FAQ, Tickets (Inbound)" },
+                { feature: "Canales", utoppia: "Voz (Nativa), WhatsApp, SMS", decagon: "Chat/Email (Principal), Voz (Secundario)" },
+                { feature: "Implementación", utoppia: "Servicio Gestionado (Nosotros configuramos)", decagon: "Plataforma Self-Serve / Partner Implementation" }
+            ],
+            strategic: [
+                { feature: "KPI Principal", utoppia: "Conversión / Recuperación de Cartera", decagon: "Ticket Deflection Rate (CSAT)" },
+                { feature: "Flexibilidad", utoppia: "Alta (Automations custom API)", decagon: "Media (Limitada a integraciones estándar)" },
+                { feature: "Público Ideal", utoppia: "Empresas buscando crecimiento/ventas", decagon: "Empresas buscando reducir costos operativos" }
+            ]
+        };
 
-        // --- CHARTS INITIALIZATION ---
-
-        const ctxRadar = document.getElementById('radarChart').getContext('2d');
-        const radarChart = new Chart(ctxRadar, {
-            type: 'radar',
-            data: {
-                labels: ['Setup Speed', 'Cost Efficiency', 'Enterprise Features', 'Autonomy Level', 'Customization'],
-                datasets: [{
-                    label: 'Decagon',
-                    data: [40, 60, 95, 75, 90],
-                    fill: true,
-                    backgroundColor: 'rgba(148, 163, 184, 0.2)',
-                    borderColor: 'rgb(148, 163, 184)',
-                    pointBackgroundColor: 'rgb(148, 163, 184)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(148, 163, 184)'
-                }, {
-                    label: 'Utoppia',
-                    data: [95, 90, 70, 90, 65],
-                    fill: true,
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                    borderColor: 'rgb(59, 130, 246)',
-                    pointBackgroundColor: 'rgb(59, 130, 246)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(59, 130, 246)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                elements: { line: { borderWidth: 3 } },
-                scales: { r: { angleLines: { display: false }, suggestedMin: 0, suggestedMax: 100 } },
-                plugins: { legend: { display: false } }
-            }
-        });
-
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        const barChart = new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['Decagon', 'Utoppia'],
-                datasets: [
-                    { label: 'Fully Automated', data: [55, 75], backgroundColor: '#3b82f6' }, // Blue for Utoppia strength
-                    { label: 'AI Assisted (Human Loop)', data: [35, 15], backgroundColor: '#94a3b8' }, // Slate
-                    { label: 'Human Only', data: [10, 10], backgroundColor: '#cbd5e1' }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: { mode: 'index', intersect: false },
-                    legend: { position: 'bottom' }
-                },
-                scales: { x: { stacked: true }, y: { stacked: true, max: 100 } }
-            }
-        });
-
-        // --- DOM MANIPULATION & INTERACTIVITY ---
-
-        function renderFeatures(filter) {
-            const tbody = document.getElementById('featureTableBody');
-            tbody.innerHTML = '';
-            
-            features.forEach(f => {
-                if (filter === 'all' || f.category === filter) {
-                    const row = document.createElement('tr');
-                    
-                    // Style logic for winner highlight
-                    const decagonStyle = f.winner === 'Decagon' ? 'font-bold text-slate-900 bg-slate-50' : 'text-slate-500';
-                    const utoppiaStyle = f.winner === 'Utoppia' ? 'font-bold text-blue-700 bg-blue-50' : 'text-slate-500';
-                    const iconDecagon = f.winner === 'Decagon' ? '★ ' : '';
-                    const iconUtoppia = f.winner === 'Utoppia' ? '★ ' : '';
-
-                    row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-slate-700">${f.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-xs text-slate-400 uppercase">${f.category}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center ${decagonStyle}">${iconDecagon}${f.decagon}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center ${utoppiaStyle}">${iconUtoppia}${f.utoppia}</td>
-                    `;
-                    tbody.appendChild(row);
-                }
-            });
-
-            // Update button states
-            ['all', 'ai', 'ops'].forEach(id => {
-                const btn = document.getElementById(`btn-${id}`);
-                if (id === filter) {
-                    btn.classList.remove('bg-white', 'text-slate-600', 'border');
-                    btn.classList.add('bg-slate-200', 'text-slate-800');
-                } else {
-                    btn.classList.add('bg-white', 'text-slate-600', 'border');
-                    btn.classList.remove('bg-slate-200', 'text-slate-800');
-                }
-            });
-        }
-
-        // ROI Calculator Logic
-        function updateROI() {
-            const volume = parseInt(document.getElementById('ticketVolume').value);
-            const cost = parseFloat(document.getElementById('ticketCost').value);
-
-            document.getElementById('ticketDisplay').innerText = volume.toLocaleString();
-            document.getElementById('costDisplay').innerText = `$${cost.toFixed(2)}`;
-
-            // Assumptions for Calculation:
-            // Decagon: 55% Auto (0 cost), 35% Assist (50% cost), 10% Human (100% cost) + Platform Fee overhead
-            // Utoppia: 75% Auto (0 cost), 15% Assist (50% cost), 10% Human (100% cost) + Lower Platform Fee
-            
-            // Baseline (No AI)
-            const totalCostBase = volume * cost;
-
-            // Decagon Model (Expensive Platform, Good Automation)
-            // Effective Cost Factor: 0.55*0 + 0.35*0.5 + 0.10*1 = 0.275 of operational cost
-            // + Platform Premium (simulated as fixed + per ticket)
-            const decagonOpsCost = totalCostBase * 0.275;
-            const decagonPlatformCost = 2000 + (volume * 0.10); // Simulated premium fee
-            const decagonTotal = decagonOpsCost + decagonPlatformCost;
-
-            // Utoppia Model (Agile, Higher Autonomy)
-            // Effective Cost Factor: 0.75*0 + 0.15*0.5 + 0.10*1 = 0.175 of operational cost
-            const utoppiaOpsCost = totalCostBase * 0.175;
-            const utoppiaPlatformCost = 500 + (volume * 0.05); // Simulated leaner fee
-            const utoppiaTotal = utoppiaOpsCost + utoppiaPlatformCost;
-
-            const savings = decagonTotal - utoppiaTotal;
-
-            document.getElementById('decagonCost').innerText = `$${Math.round(decagonTotal).toLocaleString()}`;
-            document.getElementById('utoppiaCost').innerText = `$${Math.round(utoppiaTotal).toLocaleString()}`;
-            document.getElementById('savingsDisplay').innerText = `$${Math.round(savings).toLocaleString()}`;
-        }
-
-        // Scroll helper
+        // --- Navigation Logic ---
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Feature Filter function
-        function filterFeatures(category) {
-            renderFeatures(category);
+        // --- Tab Logic ---
+        function switchTab(category) {
+            // Update Tab Styles
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('active-tab');
+            });
+            document.getElementById(`tab-${category}`).classList.add('active-tab');
+
+            // Render Content
+            const container = document.getElementById('comparison-content');
+            container.innerHTML = ''; // Clear current
+            
+            comparisons[category].forEach(item => {
+                const row = document.createElement('div');
+                row.className = "bg-white p-4 rounded-lg border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between hover:shadow-md transition gap-4";
+                row.innerHTML = `
+                    <div class="md:w-1/4 font-semibold text-slate-700">${item.feature}</div>
+                    <div class="md:w-1/3 text-teal-700 font-medium bg-teal-50 px-3 py-2 rounded border border-teal-100 w-full">
+                        <span class="text-xs text-teal-400 uppercase font-bold block mb-1">Utoppia</span>
+                        ${item.utoppia}
+                    </div>
+                    <div class="hidden md:block text-slate-300">VS</div>
+                    <div class="md:w-1/3 text-indigo-700 font-medium bg-indigo-50 px-3 py-2 rounded border border-indigo-100 w-full">
+                        <span class="text-xs text-indigo-400 uppercase font-bold block mb-1">Decagon</span>
+                        ${item.decagon}
+                    </div>
+                `;
+                container.appendChild(row);
+            });
         }
 
-        // Event Listeners
-        document.getElementById('ticketVolume').addEventListener('input', updateROI);
-        document.getElementById('ticketCost').addEventListener('input', updateROI);
+        // --- Chart Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Tab Load
+            switchTab('financial');
 
-        // Initialize
-        renderFeatures('all');
-        updateROI();
+            // 1. Radar Chart (DNA Comparison)
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Ventas Outbound', 'Soporte Inbound', 'Personalización', 'Facilidad de Uso', 'Costo Predecible', 'Complejidad Técnica'],
+                    datasets: [{
+                        label: 'Utoppia',
+                        data: [90, 70, 95, 85, 90, 20], // Low complexity for user (managed)
+                        fill: true,
+                        backgroundColor: 'rgba(15, 118, 110, 0.2)',
+                        borderColor: 'rgb(15, 118, 110)',
+                        pointBackgroundColor: 'rgb(15, 118, 110)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(15, 118, 110)'
+                    }, {
+                        label: 'Decagon',
+                        data: [30, 95, 60, 70, 40, 80], // High complexity (engineering required), Low sales focus
+                        fill: true,
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        borderColor: 'rgb(79, 70, 229)',
+                        pointBackgroundColor: 'rgb(79, 70, 229)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(79, 70, 229)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: { line: { borderWidth: 3 } },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                font: { size: 11, family: 'sans-serif' },
+                                color: '#475569'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // 2. Cost Chart (Initial Draw)
+            drawCostChart('low');
+        });
+
+        // Global variable for cost chart instance
+        let costChartInstance = null;
+
+        function drawCostChart(scenario) {
+            const ctxCost = document.getElementById('costChart').getContext('2d');
+            
+            // Destroy existing if updating
+            if(costChartInstance) costChartInstance.destroy();
+
+            // Scenario Logic (Simulated Data)
+            // Utoppia: Stable cost per unit (High Volume gets cheaper per unit in STO quote)
+            // Decagon: Platform fee is high fixed cost, plus variable.
+            
+            let utoppiaData, decagonData, labels;
+
+            if (scenario === 'low') {
+                // Low Volume: Decagon's platform fee hurts ROI
+                labels = ['Setup/Platform', 'Ingeniería', 'Uso Variable', 'Mantenimiento'];
+                utoppiaData = [5000, 0, 2000, 240]; // Setup + 0 eng + usage + maint
+                decagonData = [20000, 5000, 1000, 0]; // High platform + internal eng time + usage
+            } else {
+                // High Volume: Decagon might stabilize, but Utoppia scales linearly predictable
+                labels = ['Setup/Platform', 'Ingeniería', 'Uso Variable', 'Mantenimiento'];
+                utoppiaData = [5000, 0, 15000, 240]; // Usage grows
+                decagonData = [20000, 5000, 12000, 0]; // Usage grows + internal mgmt costs
+            }
+
+            costChartInstance = new Chart(ctxCost, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Utoppia (Costos Claros)',
+                            data: utoppiaData,
+                            backgroundColor: '#0F766E',
+                            stack: 'Stack 0',
+                        },
+                        {
+                            label: 'Decagon (Costos Estructura)',
+                            data: decagonData,
+                            backgroundColor: '#4F46E5',
+                            stack: 'Stack 1',
+                        },
+                        // Hidden Costs for Competitor (Derived from Retell comparison logic)
+                        {
+                            label: 'Costos Ocultos (Tel/Devops)',
+                            data: scenario === 'low' ? [0, 2000, 500, 0] : [0, 5000, 3000, 0],
+                            backgroundColor: '#ef4444', // Red for danger/hidden
+                            stack: 'Stack 1',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        legend: { position: 'bottom' },
+                        title: {
+                            display: true,
+                            text: scenario === 'low' ? 'Escenario: Inicio / Bajo Volumen' : 'Escenario: Escalamiento / Alto Volumen'
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, title: { display: true, text: 'Inversión Estimada (USD)' } }
+                    }
+                }
+            });
+        }
+
+        function updateCostChart(scenario) {
+            drawCostChart(scenario);
+        }
 
     </script>
 </body>
