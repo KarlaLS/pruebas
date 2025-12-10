@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligence Dossier: Decagon AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #0f111a; color: #e2e8f0; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 3px; }
+
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        /* Section Headings */
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #6366f1;
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            background-image: linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="grid-bg min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[#0f111a]/90 backdrop-blur border-b border-indigo-500/20">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center font-bold text-white mono">D</div>
+                <h1 class="font-bold text-xl tracking-tight text-white">DECAGON <span class="text-indigo-400 font-normal">| Intelligence Dossier</span></h1>
+            </div>
+            <div class="text-xs font-mono text-indigo-400">
+                STATUS: CLASSIFIED // DEEP ANALYSIS
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-16">
+
+        <!-- EXECUTIVE SUMMARY -->
+        <section>
+            <div class="glass-card p-8 rounded-2xl border-l-4 border-indigo-500">
+                <h2 class="text-3xl font-bold text-white mb-4">Resumen Ejecutivo: "El Especialista Enterprise"</h2>
+                <p class="text-lg text-slate-300 leading-relaxed max-w-4xl">
+                    Decagon no es una herramienta generalista. Es una plataforma de <strong>Deflexión de Tickets de Alto Volumen</strong> diseñada para el Enterprise (Fortune 500). <br><br>
+                    Su propuesta central no es la "automatización" genérica, sino la capacidad de imitar el razonamiento humano para cerrar casos de soporte (Refunds, Tracking, FAQs) sin intervención humana, cobrando una prima por ese resultado específico.
+                </p>
+                <div class="flex gap-4 mt-6">
+                    <span class="px-3 py-1 bg-indigo-900/50 text-indigo-300 text-xs font-bold rounded border border-indigo-500/30 uppercase tracking-wide">Customer Support Focus</span>
+                    <span class="px-3 py-1 bg-indigo-900/50 text-indigo-300 text-xs font-bold rounded border border-indigo-500/30 uppercase tracking-wide">Software Only</span>
+                    <span class="px-3 py-1 bg-indigo-900/50 text-indigo-300 text-xs font-bold rounded border border-indigo-500/30 uppercase tracking-wide">High Ticket Deflection</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. MODELO DE NEGOCIO -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <h3 class="text-2xl font-bold text-white section-title">Modelo de Negocio & Pricing</h3>
+                <p class="text-slate-400 mb-6">
+                    Decagon opera bajo un modelo híbrido de alto riesgo/alta recompensa conocido como <strong>"Resolution-Based Pricing"</strong>.
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="glass-card p-5 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-indigo-400">1. Platform Fee (La Llave)</h4>
+                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">Anual / Upfront</span>
+                        </div>
+                        <p class="text-sm text-slate-300">
+                            Cobran una licencia anual significativa ($20k - $50k USD estimados) solo por acceso a la plataforma y soporte Enterprise. Esto filtra a clientes pequeños.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border border-indigo-500/50 bg-indigo-900/10">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-indigo-400">2. Resolution Fee (El Motor)</h4>
+                            <span class="text-xs bg-indigo-600 px-2 py-1 rounded text-white">Core Revenue</span>
+                        </div>
+                        <p class="text-sm text-slate-300">
+                            No cobran por minuto ni por mensaje. Cobran por <strong>Ticket Resuelto</strong> (aprox. $0.50 - $2.50 USD dependiendo del volumen).
+                            <br><em class="text-indigo-300/70 text-xs block mt-2">"Si el bot habla por 20 minutos y escala a humano, no pagas (teóricamente)."</em>
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-indigo-400">3. Implementation (Setup)</h4>
+                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">One-time</span>
+                        </div>
+                        <p class="text-sm text-slate-300">
+                            Para cuentas grandes, incluyen fees de ingeniería por integraciones personalizadas (API connections) que no son self-serve.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl h-full flex flex-col justify-center">
+                <h4 class="text-center text-sm font-bold text-slate-500 uppercase tracking-widest mb-6">Estructura de Costos del Cliente</h4>
+                <div class="relative h-64 w-full">
+                    <canvas id="pricingChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-slate-500 mt-4">
+                    *El modelo incentiva la eficiencia técnica, pero penaliza el volumen de éxito.
+                </p>
+            </div>
+        </section>
+
+        <!-- 2. FEATURES & PRODUCT SCOPE -->
+        <section>
+            <h3 class="text-2xl font-bold text-white section-title">Features & Alcance del Producto</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Core Feature -->
+                <div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 bg-indigo-500/10 w-24 h-24 rounded-full group-hover:bg-indigo-500/20 transition-colors"></div>
+                    <i class="fa-solid fa-brain text-3xl text-indigo-400 mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Agent Operating Procedures (AOPs)</h4>
+                    <p class="text-sm text-slate-400">
+                        No usan "flujos" tradicionales. Usan AOPs: instrucciones en lenguaje natural que le dicen al bot <em>qué hacer</em> y <em>qué no hacer</em>, permitiéndole improvisar dentro de reglas estrictas.
+                    </p>
+                </div>
+
+                <!-- Integration -->
+                <div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 bg-purple-500/10 w-24 h-24 rounded-full group-hover:bg-purple-500/20 transition-colors"></div>
+                    <i class="fa-solid fa-database text-3xl text-purple-400 mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Deep Knowledge Graph</h4>
+                    <p class="text-sm text-slate-400">
+                        Ingesta masiva de documentos (Notion, PDFs, Google Docs) para crear una "memoria corporativa". El bot cita fuentes al responder.
+                    </p>
+                </div>
+
+                <!-- Limitation -->
+                <div class="glass-card p-6 rounded-xl relative overflow-hidden group border border-red-500/20">
+                    <div class="absolute -right-4 -top-4 bg-red-500/10 w-24 h-24 rounded-full group-hover:bg-red-500/20 transition-colors"></div>
+                    <i class="fa-solid fa-ban text-3xl text-red-400 mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Alcance: "Software Only"</h4>
+                    <p class="text-sm text-slate-400">
+                        Es una plataforma SaaS. Te dan el dashboard y las herramientas. El cliente (o un partner) debe construir, mantener y afinar los agentes. No es un servicio gestionado.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MERCADO OBJETIVO -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-2xl font-bold text-white section-title">Mercado Objetivo (Target)</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/30 border border-slate-700">
+                        <div class="bg-indigo-500 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">A</div>
+                        <div>
+                            <h4 class="font-bold text-white">B2C Tech High-Growth</h4>
+                            <p class="text-sm text-slate-400">Empresas como Duolingo, Substack, Eventbrite. Tienen millones de usuarios gratuitos o low-ticket que generan ruido masivo en soporte.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-lg bg-slate-800/30 border border-slate-700">
+                        <div class="bg-indigo-500 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">B</div>
+                        <div>
+                            <h4 class="font-bold text-white">Buyer Persona: VP of CX</h4>
+                            <p class="text-sm text-slate-400">
+                                Ejecutivos cuyo KPI principal es <strong>CSAT</strong> (Satisfacción) y <strong>Cost Per Ticket</strong>. Buscan reducir el headcount del Call Center sin sacrificar calidad.
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center">
+                <h4 class="text-center text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Perfil del Cliente Ideal</h4>
+                <div class="w-full h-64">
+                    <canvas id="marketRadar"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. UX & INTERACCIÓN CLIENTE -->
+        <section>
+            <h3 class="text-2xl font-bold text-white section-title">Experiencia de Interacción</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Interacción con la Empresa (B2B) -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h4 class="font-bold text-indigo-300 mb-4 border-b border-indigo-500/30 pb-2">El Cliente "Admin" (La Empresa)</h4>
+                    <p class="text-slate-300 mb-4">
+                        La experiencia es de <strong>"Control de Misión"</strong>.
+                    </p>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li><i class="fa-solid fa-terminal text-indigo-500 mr-2"></i> Dashboard centralizado de analítica.</li>
+                        <li><i class="fa-solid fa-terminal text-indigo-500 mr-2"></i> Herramientas de "Observabilidad" (Watchtower) para ver chats en tiempo real.</li>
+                        <li><i class="fa-solid fa-terminal text-indigo-500 mr-2"></i> Self-Serve: Ellos escriben las reglas en los AOPs.</li>
+                    </ul>
+                </div>
+
+                <!-- Interacción con el Usuario Final (B2C) -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h4 class="font-bold text-purple-300 mb-4 border-b border-purple-500/30 pb-2">El Usuario Final (El Chat)</h4>
+                    <p class="text-slate-300 mb-4">
+                        La experiencia es de <strong>"Concierge Invisible"</strong>.
+                    </p>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li><i class="fa-regular fa-comment-dots text-purple-500 mr-2"></i> Tono extremadamente educado y neutral.</li>
+                        <li><i class="fa-regular fa-comment-dots text-purple-500 mr-2"></i> Alta precisión (pocas alucinaciones).</li>
+                        <li><i class="fa-regular fa-comment-dots text-purple-500 mr-2"></i> Objetivo único: Resolver. No intenta hacer amigos ni vender. Solo cierra el ticket.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. VALOR AGREGADO & COMUNICACIÓN -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 glass-card p-8 rounded-2xl">
+                <h3 class="text-2xl font-bold text-white mb-6">Valor Agregado (The "Why")</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-slate-800/40 p-4 rounded-lg">
+                        <strong class="block text-white mb-1">Confiabilidad Enterprise</strong>
+                        <p class="text-xs text-slate-400">SOC2 Type II, ISO 27001, GDPR. Están construidos para pasar auditorías de seguridad bancaria.</p>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-lg">
+                        <strong class="block text-white mb-1">Human-Like Reasoning</strong>
+                        <p class="text-xs text-slate-400">Su diferenciador técnico es que sus agentes "piensan" antes de responder, navegando políticas complejas (ej. devoluciones con excepciones).</p>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-lg">
+                        <strong class="block text-white mb-1">Analytics Profundo</strong>
+                        <p class="text-xs text-slate-400">Categorización automática de tickets. Te dicen "El 20% de tus quejas son por el envío lento en California".</p>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-lg">
+                        <strong class="block text-white mb-1">Omnicanal Real</strong>
+                        <p class="text-xs text-slate-400">El mismo "cerebro" atiende el email y el chat. Mantienen el contexto si el usuario cambia de canal.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl bg-gradient-to-br from-indigo-900/40 to-slate-900 border-indigo-500/40">
+                <h3 class="text-xl font-bold text-white mb-4">Estilo de Comunicación</h3>
+                <div class="text-center my-6">
+                    <span class="text-4xl">✨</span>
+                </div>
+                <h4 class="text-center font-bold text-indigo-300 mb-2">"Magic & Engineering"</h4>
+                <p class="text-sm text-slate-400 text-center leading-relaxed">
+                    Su voz de marca combina la magia de Silicon Valley ("It just works") con autoridad técnica pesada. <br><br>
+                    No usan lenguaje de "Ventas" o "Marketing". Usan lenguaje de "Producto", "Ingeniería" y "Futuro".
+                </p>
+                <div class="mt-6 flex flex-wrap gap-2 justify-center">
+                    <span class="px-2 py-1 bg-black/30 rounded text-xs text-slate-500 font-mono">#Enterprise</span>
+                    <span class="px-2 py-1 bg-black/30 rounded text-xs text-slate-500 font-mono">#AI_Research</span>
+                    <span class="px-2 py-1 bg-black/30 rounded text-xs text-slate-500 font-mono">#Scale</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-[#0f111a] py-8 text-center">
+        <p class="text-slate-600 text-xs font-mono">GENERATED INTELLIGENCE REPORT // DECAGON.AI ANALYSIS</p>
+    </footer>
+
+    <script>
+        // Pricing Chart
+        const ctxPrice = document.getElementById('pricingChart').getContext('2d');
+        new Chart(ctxPrice, {
+            type: 'bar',
+            data: {
+                labels: ['Setup (Year 0)', 'Low Vol (Year 1)', 'High Vol (Year 2)'],
+                datasets: [
+                    {
+                        label: 'Platform Fee (Fixed)',
+                        data: [50000, 50000, 50000],
+                        backgroundColor: '#4338ca', // Indigo 700
+                    },
+                    {
+                        label: 'Resolution Costs (Variable)',
+                        data: [0, 25000, 150000], // Scales massively
+                        backgroundColor: '#818cf8', // Indigo 400
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true, grid: { display: false } },
+                    y: { stacked: true, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#cbd5e1' } }
+                }
+            }
+        });
+
+        // Market Radar
+        const ctxRadar = document.getElementById('marketRadar').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['B2C', 'B2B', 'Soporte', 'Ventas', 'Enterprise', 'SMB'],
+                datasets: [{
+                    label: 'Decagon Focus',
+                    data: [100, 20, 100, 10, 100, 0],
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: '#6366f1',
+                    pointBackgroundColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#334155' },
+                        grid: { color: '#334155' },
+                        pointLabels: { color: '#cbd5e1', font: { size: 11 } },
+                        ticks: { display: false }
+                    }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>
