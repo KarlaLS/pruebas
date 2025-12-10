@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligencia Competitiva: Decagon vs. Utoppia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Card Styling */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0F766E 0%, #0D9488 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .decagon-gradient {
+            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tabs Animation */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Chart Containers */
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .metric-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+    </style>
+    <!-- Chosen Palette: 
+         Utoppia: Teal-700 (Growth/Money) 
+         Decagon: Indigo-700 (Tech/Enterprise) 
+         Neutral: Slate-50 to Slate-900 
+    -->
+</head>
+<body class="antialiased">
+
+    <!-- Top Navigation / Header -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-teal-100 p-2 rounded-lg">
+                        <i class="fa-solid fa-layer-group text-teal-700"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900">Utoppia <span class="text-slate-400 font-light">| Market Intelligence</span></h1>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-medium px-3 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200">
+                        <i class="fa-regular fa-clock mr-1"></i> Actualizado: Dic 2025
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Executive Summary Hero -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-panel rounded-2xl p-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-teal-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/2"></div>
+                
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">El Veredicto Estratégico</h2>
+                <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                    Decagon es una herramienta de <strong>Eficiencia Operativa</strong> para corporativos que buscan reducir costos de soporte (Cost Center). <br>
+                    Utoppia es una solución de <strong>Efectividad Comercial</strong> para empresas que buscan aumentar ingresos (Revenue Center).
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-lg">
+                        <i class="fa-solid fa-shield-halved text-indigo-600"></i>
+                        <span class="text-sm font-semibold text-indigo-900">Decagon: "Deflexión de Tickets"</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-teal-50 border border-teal-100 rounded-lg">
+                        <i class="fa-solid fa-sack-dollar text-teal-700"></i>
+                        <span class="text-sm font-semibold text-teal-900">Utoppia: "Generación de Ventas"</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Comparison -->
+            <div class="glass-panel rounded-2xl p-6 flex flex-col justify-center">
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Enfoque de Mercado</h3>
+                <div class="chart-wrapper" style="height: 200px;">
+                    <canvas id="marketFocusChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deep Dive Analysis Tabs -->
+        <div class="glass-panel rounded-2xl overflow-hidden min-h-[600px]">
+            <!-- Tab Headers -->
+            <div class="border-b border-slate-200 bg-slate-50/50 flex overflow-x-auto">
+                <button onclick="openTab(event, 'business-model')" class="tab-btn px-6 py-4 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-all whitespace-nowrap active-tab-btn">
+                    1. Modelo de Negocio & Precios
+                </button>
+                <button onclick="openTab(event, 'features-scope')" class="tab-btn px-6 py-4 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-all whitespace-nowrap">
+                    2. Features & Alcance
+                </button>
+                <button onclick="openTab(event, 'target-market')" class="tab-btn px-6 py-4 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-all whitespace-nowrap">
+                    3. Mercado & Cliente Ideal
+                </button>
+                <button onclick="openTab(event, 'ux-comms')" class="tab-btn px-6 py-4 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-all whitespace-nowrap">
+                    4. UX & Comunicación
+                </button>
+            </div>
+
+            <!-- Tab Content: Business Model -->
+            <div id="business-model" class="tab-content active p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Decagon Side -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                            <span class="decagon-gradient">Decagon</span> <span class="text-xs px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded">Enterprise SaaS</span>
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="pl-4 border-l-4 border-indigo-500">
+                                <h4 class="font-bold text-slate-800">Pricing: "Resolution-Based" (Alto Riesgo)</h4>
+                                <p class="text-sm text-slate-600 mt-1">Cobran por "problema resuelto" o ticket cerrado. Suena bien, pero:</p>
+                                <ul class="list-disc list-inside text-sm text-slate-600 mt-2 space-y-1">
+                                    <li><strong>Costo Oculto:</strong> Platform Fees anuales ($20k - $50k USD).</li>
+                                    <li><strong>Ambigüedad:</strong> ¿Qué es una resolución? A veces una respuesta simple cuenta como cobro.</li>
+                                    <li><strong>Penalización por Éxito:</strong> Si tu volumen crece, tu factura crece exponencialmente.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg text-sm text-slate-500 italic">
+                                "El contrato mediano de Decagon ronda los $400,000 USD anuales. Es un modelo para Fortune 500, inaccesible para el Mid-Market."
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Utoppia Side -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                            <span class="gradient-text">Utoppia</span> <span class="text-xs px-2 py-0.5 bg-teal-100 text-teal-700 rounded">Managed Solution</span>
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="pl-4 border-l-4 border-teal-500">
+                                <h4 class="font-bold text-slate-800">Pricing: "All-in Transactional" (Previsibilidad)</h4>
+                                <p class="text-sm text-slate-600 mt-1">Modelo transparente basado en consumo real (Minutos/SMS).</p>
+                                <ul class="list-disc list-inside text-sm text-slate-600 mt-2 space-y-1">
+                                    <li><strong>Sin Sorpresas:</strong> Incluye telefonía, infraestructura, LLM y seguridad.</li>
+                                    <li><strong>Escalabilidad Lineal:</strong> Descuentos por volumen claros en contrato.</li>
+                                    <li><strong>Financiamiento:</strong> Setup amortizado (70% a 12 meses), bajando la barrera de entrada.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg text-sm text-teal-800 font-medium">
+                                "Utoppia elimina el riesgo de infraestructura (IaaS) que presentan competidores como Retell, ofreciendo un TCO (Total Cost of Ownership) más bajo."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Features & Scope -->
+            <div id="features-scope" class="tab-content p-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200">
+                                <th class="py-4 px-2 font-bold text-slate-400 text-sm uppercase">Característica</th>
+                                <th class="py-4 px-2 font-bold text-indigo-600 w-1/3">Decagon (El Especialista en Soporte)</th>
+                                <th class="py-4 px-2 font-bold text-teal-700 w-1/3">Utoppia (El Motor de Ingresos)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm divide-y divide-slate-100">
+                            <tr>
+                                <td class="py-4 px-2 font-medium text-slate-800">Feature Core</td>
+                                <td class="py-4 px-2 text-slate-600">Deflexión de Tickets (Zendesk/Salesforce).</td>
+                                <td class="py-4 px-2 text-slate-600 font-medium bg-teal-50/50">Ventas Outbound & Cobranza.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-2 font-medium text-slate-800">Canal Principal</td>
+                                <td class="py-4 px-2 text-slate-600">Texto (Chat/Email). Voz es secundario ("Concierge").</td>
+                                <td class="py-4 px-2 text-slate-600 font-medium bg-teal-50/50">Voz (Nativa) + WhatsApp/SMS Transaccional.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-2 font-medium text-slate-800">Integración KB</td>
+                                <td class="py-4 px-2 text-slate-600">Muy Profunda (Ingesta masiva de PDFs/Notion).</td>
+                                <td class="py-4 px-2 text-slate-600">Estratégica (Enfocada en manejo de objeciones de venta).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-2 font-medium text-slate-800">Alcance Solución</td>
+                                <td class="py-4 px-2 text-slate-600">
+                                    <span class="block text-xs uppercase text-slate-400 mb-1">Software Only</span>
+                                    Te dan la plataforma y los AOPs (procedimientos). Tu equipo debe configurarlos y mantenerlos.
+                                </td>
+                                <td class="py-4 px-2 text-slate-600 bg-teal-50/50">
+                                    <span class="block text-xs uppercase text-teal-400 mb-1">Managed Service</span>
+                                    "Turn-Key". Utoppia diseña, configura, conecta telefonía local y mantiene el bot.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-2 font-medium text-slate-800">Valor Agregado</td>
+                                <td class="py-4 px-2 text-slate-600">Tableros de analítica para CSAT (Customer Satisfaction).</td>
+                                <td class="py-4 px-2 text-slate-600 bg-teal-50/50">ISO 27001 + Telefonía Local Incluida + ROI directo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab Content: Target Market -->
+            <div id="target-market" class="tab-content p-8">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 space-y-6">
+                        <h4 class="text-lg font-bold text-indigo-700">🎯 Decagon Target: "El Centro de Costos"</h4>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 text-indigo-600"><i class="fa-solid fa-building"></i></div>
+                                <div>
+                                    <strong class="text-slate-800">Grandes B2C (Tech First)</strong>
+                                    <p class="text-sm text-slate-600">Duolingo, Eventbrite, Substack. Empresas con millones de usuarios y tickets repetitivos.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 text-indigo-600"><i class="fa-solid fa-user-tie"></i></div>
+                                <div>
+                                    <strong class="text-slate-800">Buyer Persona: VP of Customer Experience</strong>
+                                    <p class="text-sm text-slate-600">Su KPI es reducir headcount y presupuesto. No busca generar dinero, busca ahorrarlo.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="hidden md:block w-px h-64 bg-slate-200"></div>
+
+                    <div class="flex-1 space-y-6">
+                        <h4 class="text-lg font-bold text-teal-700">🚀 Utoppia Target: "El Centro de Crecimiento"</h4>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0 text-teal-600"><i class="fa-solid fa-chart-line"></i></div>
+                                <div>
+                                    <strong class="text-slate-800">Mid-Market & Enterprise (Sales Driven)</strong>
+                                    <p class="text-sm text-slate-600">Financieras, Seguros, Real Estate, Servicios. Empresas que necesitan vender más o cobrar.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0 text-teal-600"><i class="fa-solid fa-user-group"></i></div>
+                                <div>
+                                    <strong class="text-slate-800">Buyer Persona: Director Comercial / Ops</strong>
+                                    <p class="text-sm text-slate-600">Su KPI es Tasa de Conversión, Recuperación de Cartera y Agendamiento. Busca ROI positivo.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: UX & Communication -->
+            <div id="ux-comms" class="tab-content p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- UX Card -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                        <h4 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Experiencia de Producto (UX)</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-xs font-bold text-indigo-600 uppercase">Decagon UX</span>
+                                <p class="text-sm text-slate-600">Se siente como un "Super Empleado" reactivo. El cliente pregunta, el bot responde con precisión quirúrgica basada en manuales. Es educado, pasivo y resolutivo. Su meta es cerrar el chat rápido.</p>
+                            </div>
+                            <div class="pt-2">
+                                <span class="text-xs font-bold text-teal-600 uppercase">Utoppia UX</span>
+                                <p class="text-sm text-slate-600">Se siente como un "Vendedor Top" proactivo. El bot (Chato/Recobra) toma la iniciativa, hace preguntas de calificación, maneja objeciones emocionales y empuja hacia el cierre (SMS, Link de pago).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Communication Card -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                        <h4 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Estilo de Comunicación (Brand Voice)</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-xs font-bold text-indigo-600 uppercase">Decagon Voice</span>
+                                <p class="text-sm text-slate-600"><em>"Magic", "Enterprise-Grade", "Human-like".</em><br>Hablan mucho de la tecnología (GenAI, LLMs) y de la escala masiva. Su tono es Silicon Valley: aspiracional y técnico.</p>
+                            </div>
+                            <div class="pt-2">
+                                <span class="text-xs font-bold text-teal-600 uppercase">Utoppia Voice</span>
+                                <p class="text-sm text-slate-600"><em>"Resultados", "Automatización", "Rentabilidad".</em><br>Hablamos de negocios. Menos "magia", más "máquina de hacer dinero". Tono de socio estratégico pragmático.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Comparative Matrix Visual -->
+        <section class="glass-panel rounded-2xl p-8">
+            <h3 class="text-xl font-bold text-slate-900 mb-6">Matriz de Valor Agregado</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                
+                <!-- Item 1 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl mb-2">📞</div>
+                    <div class="text-xs font-bold uppercase text-slate-500 mb-1">Telefonía</div>
+                    <div class="text-sm font-semibold text-teal-700">Utoppia Incluida</div>
+                    <div class="text-xs text-slate-400">Decagon: Externa/Integrada</div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl mb-2">🔒</div>
+                    <div class="text-xs font-bold uppercase text-slate-500 mb-1">Seguridad</div>
+                    <div class="text-sm font-semibold text-teal-700">Utoppia ISO 27001</div>
+                    <div class="text-xs text-slate-400">Decagon: SOC 2 (Estándar)</div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl mb-2">⚙️</div>
+                    <div class="text-xs font-bold uppercase text-slate-500 mb-1">Implementación</div>
+                    <div class="text-sm font-semibold text-teal-700">Managed (Nosotros)</div>
+                    <div class="text-xs text-slate-400">Decagon: Self-Serve/Partner</div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl mb-2">💵</div>
+                    <div class="text-xs font-bold uppercase text-slate-500 mb-1">Modelo</div>
+                    <div class="text-sm font-semibold text-teal-700">Transaccional</div>
+                    <div class="text-xs text-slate-400">Decagon: Licencia + Resolución</div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 py-6 text-center text-slate-400 text-xs">
+        <p>&copy; 2025 THEgurucompany. Análisis Confidencial Interno.</p>
+    </footer>
+
+    <script>
+        // Tab Functionality
+        function openTab(evt, tabName) {
+            var i, tabContent, tabBtn;
+            
+            // Hide all content
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+                tabContent[i].classList.remove("active");
+            }
+
+            // Reset buttons
+            tabBtn = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabBtn.length; i++) {
+                tabBtn[i].className = tabBtn[i].className.replace(" active-tab-btn", "");
+                tabBtn[i].style.borderBottomColor = "transparent";
+                tabBtn[i].style.color = "#64748b"; // slate-500
+            }
+
+            // Show current
+            document.getElementById(tabName).style.display = "block";
+            setTimeout(() => document.getElementById(tabName).classList.add("active"), 10);
+            
+            // Style active button
+            evt.currentTarget.className += " active-tab-btn";
+            evt.currentTarget.style.borderBottomColor = "#0F766E"; // teal-700
+            evt.currentTarget.style.color = "#0F766E";
+        }
+
+        // Radar Chart Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select the first tab by default to ensure styles apply
+            const defaultTab = document.querySelector('.active-tab-btn');
+            if(defaultTab) {
+                defaultTab.style.borderBottomColor = "#0F766E";
+                defaultTab.style.color = "#0F766E";
+            }
+
+            const ctx = document.getElementById('marketFocusChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Soporte (Inbound)', 
+                        'Ventas (Outbound)', 
+                        'Previsibilidad Costos', 
+                        'Facilidad Setup', 
+                        'Tecnología Propia', 
+                        'Enfoque Enterprise'
+                    ],
+                    datasets: [{
+                        label: 'Decagon',
+                        data: [95, 20, 40, 50, 90, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)', // Indigo
+                        borderColor: 'rgb(99, 102, 241)',
+                        pointBackgroundColor: 'rgb(99, 102, 241)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(99, 102, 241)'
+                    }, {
+                        label: 'Utoppia',
+                        data: [60, 95, 90, 95, 85, 70],
+                        fill: true,
+                        backgroundColor: 'rgba(15, 118, 110, 0.2)', // Teal
+                        borderColor: 'rgb(15, 118, 110)',
+                        pointBackgroundColor: 'rgb(15, 118, 110)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(15, 118, 110)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: { line: { borderWidth: 3 } },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                font: { size: 10, family: 'Inter' },
+                                color: '#64748b'
+                            },
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
