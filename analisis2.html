@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utoppia vs. Decagon: Análisis de Ecosistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 3px; }
+
+        /* Animation Utilities */
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Flow Lines for Automation Viz */
+        .flow-line {
+            position: absolute;
+            background: #475569;
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+        .flow-line.active { background: #14b8a6; box-shadow: 0 0 10px #14b8a6; }
+
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-btn.active {
+            background: rgba(20, 184, 166, 0.1);
+            color: #14b8a6;
+            border-left: 3px solid #14b8a6;
+        }
+    </style>
+    <!-- 
+    CHOSEN PALETTE: Dark Mode Tech
+    - Background: Slate-900 (Deep Tech)
+    - Utoppia Accent: Teal-500 (Automation/Growth)
+    - Decagon Accent: Indigo-500 (Corporate SaaS)
+    - Text: Slate-200
+    
+    STRUCTURE PLAN:
+    1. Holodeck Dashboard: High-level contrast of "Scope" (The most critical new differentiator).
+    2. The Workflow Engine: Interactive visualization of the HR/Recruiting flow vs. Decagon's Ticket flow.
+    3. Beyond the Chat: Spotlight on Vision Computing & Physical Inventory (The "Killer Feature").
+    4. Tech Stack X-Ray: Comparing the build (n8n/ElevenLabs) vs. The Black Box.
+    5. Brand Voice Simulator: A/B testing the communication styles.
+    -->
+</head>
+<body class="flex h-screen overflow-hidden selection:bg-teal-500 selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col z-20">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-8 h-8 rounded bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center font-bold text-slate-900">U</div>
+            <span class="font-bold text-lg tracking-wide">UTOPPIA <span class="text-xs font-normal text-slate-500 block">Intelligence Suite</span></span>
+        </div>
+        
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <button onclick="showSection('dashboard')" class="nav-btn active w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-3">
+                <i class="fa-solid fa-gauge-high"></i> Dashboard Estratégico
+            </button>
+            <button onclick="showSection('workflow')" class="nav-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-3">
+                <i class="fa-solid fa-network-wired"></i> El Flujo "HR Recruiting"
+            </button>
+            <button onclick="showSection('vision')" class="nav-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-3">
+                <i class="fa-solid fa-eye"></i> Vision Computing
+            </button>
+            <button onclick="showSection('tech-stack')" class="nav-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-3">
+                <i class="fa-solid fa-microchip"></i> Stack & Seguridad
+            </button>
+            <button onclick="showSection('voice')" class="nav-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition flex items-center gap-3">
+                <i class="fa-solid fa-comments"></i> Comunicación & Voz
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800">
+            <div class="bg-slate-800/50 rounded p-3 text-xs text-slate-400">
+                <p class="mb-1"><strong class="text-teal-400">Marcas Activas:</strong></p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="px-2 py-0.5 bg-slate-700 rounded text-slate-300">Chato</span>
+                    <span class="px-2 py-0.5 bg-slate-700 rounded text-slate-300">Recobra</span>
+                    <span class="px-2 py-0.5 bg-slate-700 rounded text-slate-300">WeWell</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+        
+        <!-- Header Mobile -->
+        <div class="md:hidden bg-slate-900 p-4 flex justify-between items-center border-b border-slate-800 sticky top-0 z-50">
+            <span class="font-bold text-teal-500">UTOPPIA</span>
+            <button class="text-white"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <!-- SECTION: Dashboard -->
+        <section id="dashboard" class="p-8 max-w-7xl mx-auto space-y-8 fade-in">
+            <header class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">Análisis de Alcance: Limitado vs. Ilimitado</h1>
+                <p class="text-slate-400">Decagon se limita a la ventana de chat. Utoppia controla el proceso de negocio completo.</p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Radar Chart: The Scope Gap -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-teal-400 mb-4"><i class="fa-solid fa-crosshairs mr-2"></i>Matriz de Capacidades</h3>
+                    <div class="chart-container">
+                        <canvas id="scopeRadar"></canvas>
+                    </div>
+                    <div class="mt-4 text-xs text-center text-slate-500">
+                        *Datos basados en capacidades multi-canal y Computer Vision.
+                    </div>
+                </div>
+
+                <!-- Core Differentiator Cards -->
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Card 1 -->
+                    <div class="glass-card p-6 rounded-xl border-l-4 border-indigo-500 hover:bg-slate-800/50 transition cursor-pointer">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-indigo-400 font-bold uppercase text-xs tracking-wider mb-1">Decagon Model</h4>
+                                <h3 class="text-xl font-bold text-white">"La Caja Negra de Soporte"</h3>
+                                <p class="text-sm text-slate-400 mt-2">Su alcance termina cuando se cierra el ticket en Zendesk. No ven el mundo físico, no hacen entrevistas de voz en Teams, no orquestan procesos complejos fuera del CRM de soporte.</p>
+                            </div>
+                            <i class="fa-solid fa-box text-2xl text-indigo-500/20"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-card p-6 rounded-xl border-l-4 border-teal-500 hover:bg-slate-800/50 transition cursor-pointer">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-teal-400 font-bold uppercase text-xs tracking-wider mb-1">Utoppia Model</h4>
+                                <h3 class="text-xl font-bold text-white">"Orquestación de Negocio"</h3>
+                                <p class="text-sm text-slate-400 mt-2">Desde <strong>Vision Computing</strong> en supermercados hasta <strong>Entrevistas HR</strong> en Teams. Usamos n8n para conectar sistemas dispares (ERP, CRM, Voz, Video) en un solo flujo lógico.</p>
+                            </div>
+                            <i class="fa-solid fa-network-wired text-2xl text-teal-500/20"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Workflow Engine (HR Example) -->
+        <section id="workflow" class="hidden p-8 max-w-7xl mx-auto space-y-8 fade-in">
+            <header class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">El "Test de Ácido": Flujo de Reclutamiento</h2>
+                    <p class="text-slate-400 mt-1">Comparando cómo ambas empresas resolverían el caso de uso de HR/Recruiting.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="playWorkflow('decagon')" class="px-4 py-2 bg-slate-800 hover:bg-indigo-900/50 text-indigo-300 rounded-lg text-sm border border-indigo-900 transition">Ver Decagon</button>
+                    <button onclick="playWorkflow('utoppia')" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-sm shadow-lg shadow-teal-500/20 transition">Ver Utoppia</button>
+                </div>
+            </header>
+
+            <div class="relative min-h-[500px] glass-card rounded-2xl p-8 overflow-hidden">
+                <!-- Nodes Canvas -->
+                <div id="workflow-canvas" class="grid grid-cols-4 gap-4 h-full relative z-10">
+                    <!-- Nodes will be injected here via JS -->
+                </div>
+                
+                <!-- Feedback Area -->
+                <div id="workflow-feedback" class="absolute bottom-0 left-0 right-0 bg-slate-900/90 p-6 border-t border-slate-700 transform translate-y-full transition-transform duration-300">
+                    <h4 class="font-bold text-lg mb-2" id="feedback-title">Analysis</h4>
+                    <p class="text-sm text-slate-300" id="feedback-text">Select a simulation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Vision Computing -->
+        <section id="vision" class="hidden p-8 max-w-7xl mx-auto space-y-8 fade-in">
+            <header>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-bold border border-purple-500/20 mb-3">
+                    <i class="fa-solid fa-star"></i> DIFERENCIADOR ÚNICO
+                </div>
+                <h2 class="text-3xl font-bold text-white">Vision Computing & El Mundo Físico</h2>
+                <p class="text-slate-400 mt-2 max-w-2xl">Decagon es ciego. Utoppia ve. Nuestro proyecto de acomodo de mercancía en supermercados demuestra un alcance que va más allá del texto y la voz.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-16 h-16 mx-auto bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-teal-500/20 transition-colors">
+                        <i class="fa-solid fa-camera text-2xl text-teal-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Detección de Interacciones</h3>
+                    <p class="text-sm text-slate-400">Analizamos cómo los compradores tocan e interactúan con los productos en tiempo real.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-16 h-16 mx-auto bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-teal-500/20 transition-colors">
+                        <i class="fa-solid fa-boxes-stacked text-2xl text-teal-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Inventario Visual</h3>
+                    <p class="text-sm text-slate-400">Auditoría automática de anaqueles sin intervención humana ni códigos de barras manuales.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-16 h-16 mx-auto bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
+                        <i class="fa-solid fa-brain text-2xl text-purple-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Decagon: 0% Capacidad</h3>
+                    <p class="text-sm text-slate-400">Decagon es un LLM de texto/audio. No tiene infraestructura para procesar video streams ni Computer Vision.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Tech Stack -->
+        <section id="tech-stack" class="hidden p-8 max-w-7xl mx-auto space-y-8 fade-in">
+            <h2 class="text-2xl font-bold text-white mb-6">La Arquitectura: "Black Box" vs. "Open Workflow"</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Utoppia Stack -->
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded bg-teal-500/20 flex items-center justify-center text-teal-400"><i class="fa-solid fa-layer-group"></i></div>
+                        <h3 class="text-xl font-bold text-white">Utoppia Stack</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- n8n -->
+                        <div class="bg-slate-800 p-4 rounded-lg border-l-4 border-orange-500">
+                            <h4 class="font-bold text-white flex justify-between">
+                                Orquestación (n8n)
+                                <span class="text-xs bg-orange-500/20 text-orange-300 px-2 py-1 rounded">High Flexibility</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 mt-1">Permite lógica compleja: "Si el candidato falla inglés en Teams, mandar email tipo B y notificar en Slack".</p>
+                        </div>
+
+                        <!-- ElevenLabs -->
+                        <div class="bg-slate-800 p-4 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-bold text-white flex justify-between">
+                                Voz (ElevenLabs)
+                                <span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded">Best in Class</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 mt-1">Usamos el estándar de oro en síntesis de voz, superando la calidad nativa de muchos competidores.</p>
+                        </div>
+
+                        <!-- Security -->
+                        <div class="bg-slate-800 p-4 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-bold text-white flex justify-between">
+                                Seguridad (ISO 27001)
+                                <span class="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded">Enterprise Ready</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 mt-1">Cumplimiento total con estándares bancarios y SOC Type II.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Table -->
+                <div class="glass-card rounded-xl overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-400">
+                        <thead class="bg-slate-800 text-xs uppercase font-bold text-slate-200">
+                            <tr>
+                                <th class="p-4">Característica</th>
+                                <th class="p-4 text-indigo-400">Decagon</th>
+                                <th class="p-4 text-teal-400">Utoppia</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            <tr>
+                                <td class="p-4 font-medium text-white">Personalización Extrema</td>
+                                <td class="p-4"><span class="text-red-400"><i class="fa-solid fa-xmark"></i> Baja</span> (Solo AOPs predefinidos)</td>
+                                <td class="p-4"><span class="text-green-400"><i class="fa-solid fa-check"></i> Alta</span> (Flujos n8n custom)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-white">Integración Video/Voz</td>
+                                <td class="p-4">Limitado a Telefonía</td>
+                                <td class="p-4">Teams, Meet, Zoom, WhatsApp Audio</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-white">Lead Enrichment</td>
+                                <td class="p-4">No nativo</td>
+                                <td class="p-4">Nativo (Research Agents)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-white">Modelo de Precio</td>
+                                <td class="p-4">Opaco / Resolution Fee</td>
+                                <td class="p-4">Transaccional Transparente</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Voice & Communication -->
+        <section id="voice" class="hidden p-8 max-w-7xl mx-auto space-y-8 fade-in">
+            <h2 class="text-2xl font-bold text-white mb-6">Análisis de Comunicación de Marca</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Decagon Style -->
+                <div class="glass-card p-6 rounded-xl border border-indigo-500/30">
+                    <h3 class="text-indigo-400 font-bold mb-4 uppercase tracking-widest text-xs">Decagon Brand Voice</h3>
+                    <div class="bg-indigo-900/20 p-4 rounded italic text-slate-300 mb-4 border-l-2 border-indigo-500">
+                        "Magic", "Human-Like", "Enterprise-Grade", "Deflection".
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li>• Se posicionan como una compañía de <strong>AI Research</strong>.</li>
+                        <li>• Su mensaje es para el CTO/CIO: "Seguridad y Control".</li>
+                        <li>• Prometen reemplazar humanos para ahorrar costos.</li>
+                    </ul>
+                </div>
+
+                <!-- Utoppia Style -->
+                <div class="glass-card p-6 rounded-xl border border-teal-500/30">
+                    <h3 class="text-teal-400 font-bold mb-4 uppercase tracking-widest text-xs">Utoppia Brand Voice</h3>
+                    <div class="bg-teal-900/20 p-4 rounded italic text-slate-300 mb-4 border-l-2 border-teal-500">
+                        "Empowerment", "Resultados", "Velocidad", "Personalización".
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li>• Nos posicionamos como <strong>Socios de Negocio</strong>.</li>
+                        <li>• Nuestro mensaje es para Ops/Sales: "Eficiencia y Ventas".</li>
+                        <li>• Prometemos *empoderar* equipos eliminando la rutina.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-xl mt-6">
+                <h4 class="font-bold text-white mb-2">El Gancho de Ventas (Hook)</h4>
+                <p class="text-slate-400 text-sm">
+                    Decagon: <em>"Instala esto y despide a 50 agentes de soporte."</em> (Miedo/Ahorro)<br>
+                    Utoppia: <em>"Usa esto para que tus agentes vendan más y tu inventario se cuente solo."</em> (Crecimiento/Potencial)
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Navigation Logic ---
+        function showSection(id) {
+            // Hide all sections
+            document.querySelectorAll('main > section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+            // Show selected
+            document.getElementById(id).classList.remove('hidden');
+            
+            // Update nav active state
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- Chart Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctxScope = document.getElementById('scopeRadar').getContext('2d');
+            new Chart(ctxScope, {
+                type: 'radar',
+                data: {
+                    labels: ['Soporte Texto', 'Voz (Llamadas)', 'Visión (Retail)', 'Entrevistas (Teams/Video)', 'Automatización (ERP)', 'Lead Research'],
+                    datasets: [{
+                        label: 'Decagon',
+                        data: [100, 60, 0, 10, 30, 20],
+                        fill: true,
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)', // Indigo
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)'
+                    }, {
+                        label: 'Utoppia Ecosystem',
+                        data: [90, 95, 100, 100, 100, 100], // Full Scope
+                        fill: true,
+                        backgroundColor: 'rgba(20, 184, 166, 0.2)', // Teal
+                        borderColor: 'rgba(20, 184, 166, 1)',
+                        pointBackgroundColor: 'rgba(20, 184, 166, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            pointLabels: { color: '#94a3b8', font: { size: 10 } },
+                            ticks: { display: false, backdropColor: 'transparent' }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#e2e8f0' } }
+                    }
+                }
+            });
+        });
+
+        // --- Workflow Simulation Logic ---
+        function playWorkflow(type) {
+            const canvas = document.getElementById('workflow-canvas');
+            const feedbackBox = document.getElementById('workflow-feedback');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            canvas.innerHTML = ''; // Reset
+            feedbackBox.style.transform = "translateY(100%)";
+
+            if (type === 'decagon') {
+                // Render Decagon Linear Flow
+                const steps = [
+                    { icon: 'fa-ticket', name: 'Ticket Zendesk', color: 'bg-indigo-600' },
+                    { icon: 'fa-robot', name: 'AI Reply', color: 'bg-indigo-500' },
+                    { icon: 'fa-check', name: 'Cierre Ticket', color: 'bg-indigo-400' }
+                ];
+                
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        const div = document.createElement('div');
+                        div.className = `flex flex-col items-center justify-center p-4 rounded-xl ${step.color} text-white fade-in`;
+                        div.innerHTML = `<i class="fa-solid ${step.icon} text-2xl mb-2"></i><span class="text-xs font-bold">${step.name}</span>`;
+                        canvas.appendChild(div);
+                    }, index * 400);
+                });
+
+                setTimeout(() => {
+                    feedbackBox.style.transform = "translateY(0)";
+                    feedbackTitle.innerHTML = "<span class='text-indigo-400'>Limitación de Decagon</span>";
+                    feedbackTitle.className = "font-bold text-lg mb-2 text-indigo-400";
+                    feedbackText.innerHTML = "Decagon funciona bien, pero solo dentro del ticket. No puede salir a Teams, no puede entrevistar por voz, no puede notificar proactivamente a RH fuera de la plataforma de soporte.";
+                }, 1500);
+
+            } else {
+                // Render Utoppia Complex Flow
+                const steps = [
+                    { icon: 'fa-whatsapp', name: '1. CV Check (WA)', color: 'bg-green-600', col: 'col-span-1' },
+                    { icon: 'fa-video', name: '2. Entrevista Teams (AI)', color: 'bg-blue-600', col: 'col-span-1' },
+                    { icon: 'fa-envelope', name: '3. Email a RH', color: 'bg-yellow-600', col: 'col-span-1' },
+                    { icon: 'fa-database', name: '4. Update ERP', color: 'bg-teal-600', col: 'col-span-1' }
+                ];
+
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        const div = document.createElement('div');
+                        div.className = `flex flex-col items-center justify-center p-4 rounded-xl ${step.color} text-white fade-in ${step.col}`;
+                        div.innerHTML = `<i class="fa-solid ${step.icon} text-2xl mb-2"></i><span class="text-xs font-bold">${step.name}</span>`;
+                        canvas.appendChild(div);
+                    }, index * 400);
+                });
+
+                setTimeout(() => {
+                    feedbackBox.style.transform = "translateY(0)";
+                    feedbackTitle.innerHTML = "<span class='text-teal-400'>Ventaja de Ecosistema Utoppia</span>";
+                    feedbackTitle.className = "font-bold text-lg mb-2 text-teal-400";
+                    feedbackText.innerHTML = "Gracias a la orquestación con n8n y capacidades de voz/video, Utoppia conecta puntos aislados. Validamos en WhatsApp, saltamos a Teams para evaluar inglés y cerramos en el ERP. Un flujo completo de negocio, no solo un chat.";
+                }, 1800);
+            }
+        }
+    </script>
+</body>
+</html>
