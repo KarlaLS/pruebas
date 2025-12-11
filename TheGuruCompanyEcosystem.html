@@ -57,15 +57,9 @@
         }
         .node:hover ~ .connector { background: #2DD4BF; box-shadow: 0 0 8px #2DD4BF; }
     </style>
-    <!-- Chosen Palette: 
-         Primary: Teal-500 (#14B8A6) -> Represents Growth/Utoppia
-         Secondary: Emerald-600 (#059669) -> Represents Money/Revenue
-         Background: Deep Dark Cyan/Slate (#04090B)
-    -->
 </head>
-<body class="min-h-screen flex flex-col md:flex-row overflow-hidden selection:bg-teal-500 selection:text-black">
+<body class="min-h-screen flex flex-col md:flex-row md:overflow-hidden selection:bg-teal-500 selection:text-black">
 
-    <!-- Left Sidebar Navigation -->
     <aside class="w-full md:w-72 bg-[#020405]/95 border-r border-teal-900/30 flex flex-col z-20">
         <div class="p-8 pb-4">
             <h1 class="heading-font text-2xl font-bold tracking-tight text-white leading-none">THE<span class="text-teal-400">guru</span><br>COMPANY</h1>
@@ -104,12 +98,10 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto relative bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
+    <main class="flex-1 md:overflow-y-auto relative bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
         
         <div class="max-w-6xl mx-auto p-8 space-y-12">
 
-            <!-- SECTION: EXECUTIVE SUMMARY -->
             <section id="executive" class="section-content animate-fade-in">
                 <header class="mb-10 border-b border-teal-900/30 pb-6">
                     <h2 class="text-4xl md:text-5xl font-bold text-white heading-font mb-4">El Orquestador de Negocios</h2>
@@ -120,25 +112,21 @@
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                    <!-- Brand: Utoppia -->
                     <div class="brand-card p-6 rounded-xl flex flex-col items-center text-center">
                         <div class="text-2xl mb-2">🚀</div>
                         <h3 class="font-bold text-teal-400">Utoppia.ai</h3>
                         <p class="text-xs text-slate-400 mt-2">La nave nodriza. Automatización End-to-End y Orquestación.</p>
                     </div>
-                    <!-- Brand: Chato -->
                     <div class="brand-card p-6 rounded-xl flex flex-col items-center text-center">
                         <div class="text-2xl mb-2">🤖</div>
                         <h3 class="font-bold text-teal-400">Chato.ai</h3>
                         <p class="text-xs text-slate-400 mt-2">Asistentes conversacionales inteligentes multicanal.</p>
                     </div>
-                    <!-- Brand: Recobra -->
                     <div class="brand-card p-6 rounded-xl flex flex-col items-center text-center">
                         <div class="text-2xl mb-2">💸</div>
                         <h3 class="font-bold text-teal-400">Recobra.mx</h3>
                         <p class="text-xs text-slate-400 mt-2">Especialistas en recuperación de cartera y cobranza IA.</p>
                     </div>
-                    <!-- Brand: WeWell -->
                     <div class="brand-card p-6 rounded-xl flex flex-col items-center text-center">
                         <div class="text-2xl mb-2">❤️</div>
                         <h3 class="font-bold text-teal-400">WeWell.ai</h3>
@@ -147,7 +135,6 @@
                 </div>
             </section>
 
-            <!-- SECTION: BUSINESS MODEL -->
             <section id="business-model" class="section-content hidden animate-fade-in">
                 <h3 class="text-3xl font-bold text-white heading-font mb-8 border-l-4 border-teal-500 pl-4">Modelo de Negocio: Predictibilidad & ROI</h3>
                 
@@ -158,6 +145,7 @@
                         <p class="text-slate-300 mb-6 leading-relaxed">
                             A diferencia de modelos IaaS fragmentados o modelos de "Resolución" opacos, Utoppia ofrece un costo claro por transacción (Minuto/Mensaje).
                         </p>
+
                         <ul class="space-y-4">
                             <li class="flex items-start gap-3">
                                 <i class="fa-solid fa-circle-check text-teal-500 mt-1"></i>
@@ -185,26 +173,21 @@
                 </div>
             </section>
 
-            <!-- SECTION: SCOPE & FEATURES -->
             <section id="scope-features" class="section-content hidden animate-fade-in">
                 <div class="flex justify-between items-end mb-8">
                     <h3 class="text-3xl font-bold text-white heading-font border-l-4 border-teal-500 pl-4">Alcance: "Unlimited Scope"</h3>
                     <span class="px-3 py-1 rounded bg-teal-500/20 text-teal-400 text-xs font-mono border border-teal-500/30">POWERED BY n8n</span>
                 </div>
 
-                <!-- The Ecosystem Viz -->
                 <div class="relative glass-panel rounded-2xl p-10 mb-8 min-h-[400px] flex items-center justify-center overflow-hidden">
-                    <!-- Background Grid -->
                     <div class="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.05)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
-                    <!-- Central Brain -->
                     <div class="absolute z-10 bg-slate-900 border-2 border-teal-500 p-6 rounded-full shadow-[0_0_30px_rgba(20,184,166,0.4)] flex flex-col items-center">
                         <i class="fa-solid fa-network-wired text-3xl text-teal-400 mb-1"></i>
                         <span class="font-bold text-white text-xs tracking-widest">ORCHESTRATOR</span>
                         <span class="text-[10px] text-teal-600 font-mono">(n8n Logic)</span>
                     </div>
 
-                    <!-- Orbiting Satellites -->
                     <div class="absolute top-10 left-10 md:top-16 md:left-32 bg-slate-800 p-4 rounded-xl border border-slate-700 flex items-center gap-3 w-48 hover:border-teal-400 transition cursor-default group">
                         <div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center text-blue-400 group-hover:text-white group-hover:bg-blue-600 transition"><i class="fa-brands fa-microsoft"></i></div>
                         <div class="text-xs">
@@ -264,12 +247,10 @@
                 </div>
             </section>
 
-            <!-- SECTION: MARKET & UX -->
             <section id="market-target" class="section-content hidden animate-fade-in">
                 <h3 class="text-3xl font-bold text-white heading-font mb-8 border-l-4 border-teal-500 pl-4">Mercado & Interacción</h3>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Target Market -->
                     <div class="lg:col-span-1 glass-panel p-6 rounded-xl">
                         <h4 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-crosshairs text-teal-400"></i> Cliente Objetivo</h4>
                         <div class="space-y-4">
@@ -284,7 +265,6 @@
                         </div>
                     </div>
 
-                    <!-- Interaction UX -->
                     <div class="lg:col-span-2 glass-panel p-6 rounded-xl">
                         <h4 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-hand-holding-heart text-teal-400"></i> Experiencia de Cliente (UX)</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -305,7 +285,6 @@
                 </div>
             </section>
 
-            <!-- SECTION: ADDED VALUE -->
             <section id="added-value" class="section-content hidden animate-fade-in">
                 <h3 class="text-3xl font-bold text-white heading-font mb-8 border-l-4 border-teal-500 pl-4">Valor Agregado (Diferenciadores)</h3>
                 
@@ -333,7 +312,6 @@
                 </div>
             </section>
 
-            <!-- SECTION: COMMUNICATION -->
             <section id="communication" class="section-content hidden animate-fade-in">
                 <div class="glass-panel p-10 rounded-2xl text-center bg-gradient-to-b from-slate-900 to-[#020405]">
                     <h3 class="text-3xl font-bold text-teal-400 mb-6 heading-font">Nuestra Voz: "Empowerment & Results"</h3>
