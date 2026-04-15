@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wewell - Análisis de Mercado B2B / B2C</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 50vh;
+            max-height: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .tab-btn.active {
+            border-bottom-width: 4px;
+            border-color: #0d9488;
+            color: #0f766e;
+            font-weight: 600;
+        }
+        .pill {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .pill-b2b { background-color: #dbeafe; color: #1e40af; }
+        .pill-b2c { background-color: #fce7f3; color: #be185d; }
+        .pill-wellness { background-color: #dcfce7; color: #166534; }
+        .pill-fitness { background-color: #ffedd5; color: #c2410c; }
+        .pill-nutrition { background-color: #f3e8ff; color: #6b21a8; }
+        .hide { display: none !important; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Chosen Palette: Warm Neutrals (Slate) with Teal/Emerald accents to convey health, stability, and growth. -->
+    
+    <!-- Application Structure Plan: The SPA is structured as a strategic dashboard. It begins with an Executive Summary of Wewell's current context based on the transcript. Then, it presents the "Competitor Quadrant" using a scatter/bubble chart to visually map the landscape by integration level and price. A filterable directory of competitors follows, allowing deep dives into offerings and costs. Finally, an actionable "Entry Points" section synthesizes the findings into strategic recommendations for Wewell. This flow moves the user from context -> macro view -> micro data -> actionable strategy. -->
+
+    <!-- Visualization & Content Choices: 
+        1. Contextual Summary (Text/Grid): Informs the baseline Wewell metrics (costs, pillars) extracted from the meeting.
+        2. Competitor Quadrant (Chart.js Bubble): Compares Competitors. X-Axis: Focus (B2C to B2B), Y-Axis: Price (MXN), Bubble Size: Feature completeness. Shows where Wewell fits perfectly (low cost, high integration). NO SVG used.
+        3. Interactive Competitor Directory (HTML DOM + JS): Organizes data. Users can filter by B2B/B2C or Pilar. Justification: Prevents information overload and makes specific competitor lookups fast. NO SVG used.
+        4. Strategic Entry Points (HTML Cards/Grid): Clear, actionable recommendations derived from the market gaps and meeting ideas (MVP, Gamification, NOM-035).
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-brand-600 tracking-tighter">Wewell</span>
+                    <span class="ml-2 text-sm font-medium text-slate-500 border-l border-slate-300 pl-2">Inteligencia de Mercado</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="scrollToSection('contexto')" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Contexto</button>
+                    <button onclick="scrollToSection('cuadrante')" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Cuadrante</button>
+                    <button onclick="scrollToSection('competencia')" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Competencia</button>
+                    <button onclick="scrollToSection('estrategia')" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Estrategia</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <section id="contexto" class="scroll-mt-24">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="max-w-3xl">
+                    <h1 class="text-3xl font-extrabold text-slate-900 mb-4">Análisis del Entorno Competitivo</h1>
+                    <p class="text-lg text-slate-600 mb-6">
+                        Basado en la sesión estratégica (Abril 2026), el objetivo de este dashboard es mapear el mercado en México para los tres pilares de <strong>Wewell (Wellness, Fitness, Nutrición)</strong>, identificar a los jugadores clave en esquemas B2B y B2C, entender sus modelos de precios (frente a nuestro costo proyectado de $6 a $52 MXN) y definir rutas óptimas de comercialización y retención para mitigar el <em>churn</em>.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div class="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Costo Base Wewell</div>
+                        <div class="text-2xl font-bold text-slate-800">$52 <span class="text-sm font-normal text-slate-500">MXN/mes</span></div>
+                        <div class="text-sm text-slate-600 mt-1">Con IA completa (texto/imágenes)</div>
+                    </div>
+                    <div class="bg-brand-50 rounded-xl p-4 border border-brand-100">
+                        <div class="text-xs text-brand-600 font-semibold uppercase tracking-wide mb-1">Costo MVP Wewell</div>
+                        <div class="text-2xl font-bold text-brand-800">$6 <span class="text-sm font-normal text-brand-600">MXN/mes</span></div>
+                        <div class="text-sm text-brand-700 mt-1">Chatbot simple (texto), ideal partners</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div class="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Modelo Actual</div>
+                        <div class="text-lg font-bold text-slate-800">B2B & B2B2C</div>
+                        <div class="text-sm text-slate-600 mt-1">Alta retención, patrocinio corporativo</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div class="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Reto Principal</div>
+                        <div class="text-lg font-bold text-rose-600">Deserción B2C</div>
+                        <div class="text-sm text-slate-600 mt-1">Requiere gamificación/incentivos</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cuadrante" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Cuadrante de Competencia: Integración vs Precio</h2>
+            <p class="text-slate-600 mb-6 max-w-4xl">
+                Este gráfico mapea a los competidores según su enfoque de mercado (Eje X: de B2C puro a B2B Corporativo) y su costo mensual promedio (Eje Y). El tamaño de la burbuja representa la amplitud de sus características (cuántos pilares cubren). <strong>Wewell (burbujas verdes)</strong> se posiciona estratégicamente en la zona de bajo costo y alta integración.
+            </p>
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="chart-container">
+                    <canvas id="quadrantChart"></canvas>
+                </div>
+                <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-slate-600">
+                    <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-slate-400 mr-2 opacity-60"></span> Competidor B2C/B2B</div>
+                    <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-brand-500 mr-2 opacity-80"></span> Wewell (Modelos)</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="competencia" class="scroll-mt-24">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Directorio de Competencia</h2>
+                    <p class="text-slate-600">Filtra y explora las plataformas que compiten en el mercado mexicano.</p>
+                </div>
+                <div class="flex flex-wrap gap-2" id="filter-container">
+                    <button class="filter-btn tab-btn active px-3 py-2 text-sm transition-all" data-filter="all">Todos</button>
+                    <button class="filter-btn tab-btn px-3 py-2 text-sm text-slate-500 transition-all" data-filter="b2b">Solo B2B</button>
+                    <button class="filter-btn tab-btn px-3 py-2 text-sm text-slate-500 transition-all" data-filter="b2c">Solo B2C</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="competitor-grid">
+            </div>
+        </section>
+
+        <section id="estrategia" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Puntos de Entrada Estratégicos para Wewell</h2>
+            <p class="text-slate-600 mb-6 max-w-4xl">
+                Considerando la saturación de apps B2C con alta deserción, y nuestra ventaja competitiva en costos mediante agentes IA y WhatsApp, estas son las tres rutas óptimas para penetrar el mercado mexicano.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-2xl font-bold mb-4">&#9874;</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">1. Cumplimiento NOM-035 (B2B Puro)</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">
+                        Las empresas mexicanas tienen la obligación legal de prevenir riesgos psicosociales. Wewell puede ofrecerse como un monitor pasivo y activo del estrés de los empleados a través del pilar Wellness, generando reportes anonimizados para RRHH.
+                    </p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-start">
+                            <span class="text-brand-500 mr-2">&#10003;</span>
+                            <span class="text-sm text-slate-700">Competencia: Cuéntame (Caro, enfocado en terapia 1 a 1).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-brand-500 mr-2">&#10003;</span>
+                            <span class="text-sm text-slate-700">Nuestra Ventaja: Análisis continuo vía IA, costo marginal.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto pt-4 border-t border-slate-100">
+                        <span class="text-sm font-semibold text-slate-900">Target:</span> <span class="text-sm text-slate-600">Empresas medianas/grandes, Sindicatos.</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center text-2xl font-bold mb-4">&#10050;</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">2. Modelo Marca Blanca MVP (B2B2C)</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">
+                        Siguiendo la idea de Medi ($6 MXN), crear una versión ultra-simplificada (solo chat, sin análisis de imágenes) empaquetada como beneficio de valor agregado para aseguradoras, bancos o telecomunicaciones.
+                    </p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-start">
+                            <span class="text-brand-500 mr-2">&#10003;</span>
+                            <span class="text-sm text-slate-700">Competencia: Asistencias telefónicas tradicionales.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-brand-500 mr-2">&#10003;</span>
+                            <span class="text-sm text-slate-700">Nuestra Ventaja: Chat instantáneo 24/7 en WhatsApp, integrabilidad rápida vía API.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto pt-4 border-t border-slate-100">
+                        <span class="text-sm font-semibold text-slate-900">Target:</span> <span class="text-sm text-slate-600">Aseguradoras (Gastos médicos menores), Telcos.</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-2xl font-bold mb-4">&#9733;</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">3. Ecosistema de Gamificación y Recompensas</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">
+                        Para combatir la deserción (como en Duolingo), aliarse con marcas de consumo (ej. Nutriza) para otorgar descuentos basados en el cumplimiento de los planes de nutrición o fitness registrados en Wewell/HealthKit.
+                    </p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-start">
+                            <span class="text-brand-500 mr-2">&#10003;</span>
+                            <span class="text-sm text-slate-700">Competencia: Betterfly (B2B, otorga seguro de vida).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-brand-500 mr-2">&#10003;</span>
+                            <span class="text-sm text-slate-700">Nuestra Ventaja: Recompensas de gratificación inmediata (descuentos tangibles) a nivel B2C o corporativo.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-auto pt-4 border-t border-slate-100">
+                        <span class="text-sm font-semibold text-slate-900">Target:</span> <span class="text-sm text-slate-600">Cadenas de salud/deporte, Programas de Lealtad.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>Wewell AI - Dashboard Interno de Análisis Estratégico. Abril 2026.</p>
+    </footer>
+
+    <script>
+        const competitorsData = [
+            {
+                name: "Wellhub (antes Gympass)",
+                type: ["b2b"],
+                pillars: ["fitness", "wellness"],
+                price: 500,
+                description: "Plataforma corporativa dominante. Acceso a red de gimnasios y apps de meditación/terapia. No incluye agentes IA personalizados.",
+                offerings: "Suscripciones de gimnasios, apps de salud mental, clases en vivo.",
+                xPos: 9,
+                features: 7
+            },
+            {
+                name: "Betterfly",
+                type: ["b2b"],
+                pillars: ["wellness", "fitness"],
+                price: 200,
+                description: "App de beneficios que recompensa hábitos saludables con donaciones y seguro de vida dinámico. Fuerte en gamificación.",
+                offerings: "Seguro de vida, retos corporativos, telemedicina, educación financiera.",
+                xPos: 8,
+                features: 8
+            },
+            {
+                name: "Cuéntame",
+                type: ["b2b"],
+                pillars: ["wellness"],
+                price: 300,
+                description: "Especialistas en salud mental corporativa para cumplimiento de NOM-035 en México. Terapias psicológicas online.",
+                offerings: "Rutas de bienestar mental, terapia 1 a 1, reportes NOM-035.",
+                xPos: 10,
+                features: 4
+            },
+            {
+                name: "Fitia",
+                type: ["b2c"],
+                pillars: ["nutrition"],
+                price: 150,
+                description: "App muy popular en LATAM para conteo de macros y planes de alimentación automatizados.",
+                offerings: "Dietas personalizadas, listas de súper, recetas latinas.",
+                xPos: 1,
+                features: 4
+            },
+            {
+                name: "Noom",
+                type: ["b2c"],
+                pillars: ["nutrition", "wellness"],
+                price: 600,
+                description: "Enfoque en psicología para la pérdida de peso. Alto costo para el usuario final en México ($).",
+                offerings: "Coaching psicológico, registro de comidas, lecciones diarias.",
+                xPos: 2,
+                features: 6
+            },
+            {
+                name: "MyFitnessPal (Premium)",
+                type: ["b2c"],
+                pillars: ["nutrition", "fitness"],
+                price: 400,
+                description: "La base de datos de alimentos más grande. Integración con wearables, pero modelo pasivo (el usuario debe registrar todo manualmente).",
+                offerings: "Conteo calórico, rutinas básicas, escáner de código de barras.",
+                xPos: 1,
+                features: 5
+            },
+            {
+                name: "Wewell (Completo)",
+                type: ["b2b", "b2c"],
+                pillars: ["wellness", "fitness", "nutrition"],
+                price: 52,
+                description: "Nuestro modelo actual. 3 pilares integrados vía WhatsApp, análisis de imágenes, agentes de IA profunda y contexto semanal.",
+                offerings: "Coaching IA diario, rutinas, nutrición por foto, seguimiento de humor.",
+                xPos: 6,
+                features: 10,
+                isWewell: true
+            },
+            {
+                name: "Wewell (MVP Aliados)",
+                type: ["b2b"],
+                pillars: ["wellness", "fitness", "nutrition"],
+                price: 6,
+                description: "Versión ligera discutida en sesión. Solo texto, consultas rápidas. Ideal para empaquetar con aseguradoras o telcos.",
+                offerings: "Chatbot IA básico para consultas de salud, sin análisis complejo.",
+                xPos: 7,
+                features: 4,
+                isWewell: true
+            }
+        ];
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderCompetitorCards(filter) {
+            const container = document.getElementById('competitor-grid');
+            container.innerHTML = '';
+
+            const filteredData = competitorsData.filter(comp => {
+                if (filter === 'all') return true;
+                return comp.type.includes(filter);
+            });
+
+            filteredData.forEach(comp => {
+                let pilarPills = '';
+                if(comp.pillars.includes('wellness')) pilarPills += '<span class="pill pill-wellness mr-1 mb-1">Wellness</span>';
+                if(comp.pillars.includes('fitness')) pilarPills += '<span class="pill pill-fitness mr-1 mb-1">Fitness</span>';
+                if(comp.pillars.includes('nutrition')) pilarPills += '<span class="pill pill-nutrition mr-1 mb-1">Nutrición</span>';
+
+                let typePills = '';
+                if(comp.type.includes('b2b')) typePills += '<span class="pill pill-b2b mr-1 mb-1">B2B</span>';
+                if(comp.type.includes('b2c')) typePills += '<span class="pill pill-b2c mr-1 mb-1">B2C</span>';
+
+                const borderClass = comp.isWewell ? 'border-brand-400 border-2 bg-brand-50' : 'border-slate-200 bg-white';
+                const wewellBadge = comp.isWewell ? '<span class="absolute -top-3 -right-3 bg-brand-500 text-white text-xs px-2 py-1 rounded-full shadow-sm font-bold">Nosotros</span>' : '';
+
+                const cardHtml = `
+                    <div class="rounded-2xl p-6 border relative transition-shadow hover:shadow-md flex flex-col h-full ${borderClass}">
+                        ${wewellBadge}
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-slate-900 leading-tight pr-4">${comp.name}</h3>
+                            <div class="text-right whitespace-nowrap">
+                                <span class="block text-xl font-extrabold text-slate-800">$${comp.price}</span>
+                                <span class="text-xs text-slate-500">MXN/mes est.</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            ${typePills}
+                            ${pilarPills}
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4 flex-grow">${comp.description}</p>
+                        <div class="pt-4 border-t border-slate-200/60 mt-auto">
+                            <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Oferta Principal</h4>
+                            <p class="text-sm text-slate-700">${comp.offerings}</p>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('quadrantChart').getContext('2d');
+            
+            const chartData = competitorsData.map(comp => ({
+                x: comp.xPos,
+                y: comp.price,
+                r: comp.features * 2.5,
+                name: comp.name,
+                isWewell: comp.isWewell || false
+            }));
+
+            const wewellPoints = chartData.filter(d => d.isWewell);
+            const competitorPoints = chartData.filter(d => !d.isWewell);
+
+            new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Competidores Mercado',
+                            data: competitorPoints,
+                            backgroundColor: 'rgba(148, 163, 184, 0.4)',
+                            borderColor: 'rgba(100, 116, 139, 0.8)',
+                            borderWidth: 1,
+                            hoverBackgroundColor: 'rgba(100, 116, 139, 0.8)'
+                        },
+                        {
+                            label: 'Wewell',
+                            data: wewellPoints,
+                            backgroundColor: 'rgba(20, 184, 166, 0.6)',
+                            borderColor: 'rgba(13, 148, 136, 1)',
+                            borderWidth: 2,
+                            hoverBackgroundColor: 'rgba(13, 148, 136, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = context.raw;
+                                    return `${item.name}: $${item.y} MXN/mes`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: 0,
+                            max: 11,
+                            title: {
+                                display: true,
+                                text: 'Enfoque de Mercado (0 = B2C Puro / 10 = B2B Corporativo)',
+                                color: '#64748b',
+                                font: { weight: 'bold' }
+                            },
+                            grid: { color: '#f1f5f9' },
+                            ticks: { display: false }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Precio Mensual Estimado (MXN)',
+                                color: '#64748b',
+                                font: { weight: 'bold' }
+                            },
+                            grid: { color: '#f1f5f9' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCompetitorCards('all');
+            initChart();
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.add('text-slate-500');
+                    });
+                    
+                    e.target.classList.add('active');
+                    e.target.classList.remove('text-slate-500');
+                    
+                    const filterValue = e.target.getAttribute('data-filter');
+                    renderCompetitorCards(filterValue);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
